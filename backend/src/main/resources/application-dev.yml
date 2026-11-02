@@ -1,0 +1,16 @@
+spring:
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=chodocu;encrypt=true;trustServerCertificate=true
+    username: sa
+    password: "ChoDoCuJ2EE@"
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    show-sql: true
+  flyway:
+    enabled: false
+
+server:
+  port: 8080

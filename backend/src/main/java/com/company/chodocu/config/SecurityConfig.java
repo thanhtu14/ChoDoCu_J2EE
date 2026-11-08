@@ -25,7 +25,7 @@ public class SecurityConfig {
         return http.csrf(c->c.disable()).sessionManagement(s->s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
           .authorizeHttpRequests(a->a
             .requestMatchers("/api/auth/**","/swagger-ui/**","/swagger-ui.html","/v3/api-docs/**","/actuator/health").permitAll()
-            .requestMatchers(HttpMethod.GET, "/api/dia-chi/**", "/api/danh-muc", "/api/banner", "/api/dich-vu").permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/dia-chi/**", "/api/danh-muc", "/api/banner", "/api/dich-vu", "/api/bai-dang/**").permitAll()
             .anyRequest().authenticated())
           .addFilterBefore(jwt, UsernamePasswordAuthenticationFilter.class).build();
     }

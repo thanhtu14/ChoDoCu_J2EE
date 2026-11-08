@@ -41,10 +41,10 @@ public class DiaChiController {
     }
 
     private Map<String, Object> thanhPhoDto(ThanhPho item) {
-        return Map.of("idThanhPho", item.getId(), "tenThanhPho", item.getTenThanhPho());
+        return Map.of("id", item.getId(), "tenThanhPho", item.getTenThanhPho());
     }
 
     private Map<String, Object> phuongXaDto(PhuongXa item) {
-        return Map.of("idPhuongXa", item.getId(), "tenPhuongXa", item.getTenPhuongXa(), "idThanhPho", item.getThanhPho().getId());
+        return Map.of("id", item.getId(), "tenPhuongXa", item.getTenPhuongXa(), "idThanhPho", item.getThanhPho().getId());
     }
 }

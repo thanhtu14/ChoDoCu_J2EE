@@ -7,6 +7,8 @@ import com.company.chodocu.entity.NguoiDung;
 import com.company.chodocu.enums.TrangThaiNguoiDung;
 import com.company.chodocu.repository.MaXacThucRepository;
 import com.company.chodocu.repository.NguoiDungRepository;
+import com.company.chodocu.repository.ThanhPhoRepository;
+import com.company.chodocu.repository.PhuongXaRepository;
 import com.company.chodocu.mapper.NguoiDungMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -28,8 +30,10 @@ public class AccountSecurityService {
     private final NguoiDungRepository users; private final MaXacThucRepository tokens; private final PasswordEncoder encoder;
     private final EmailService email; private final byte[] key;
     private final NguoiDungMapper nguoiDungMapper;
-    public AccountSecurityService(NguoiDungRepository users,MaXacThucRepository tokens,PasswordEncoder encoder,EmailService email,NguoiDungMapper nguoiDungMapper,@Value("${app.jwt.key}") String key){
+    private final ThanhPhoRepository thanhPhos; private final PhuongXaRepository phuongXas;
+    public AccountSecurityService(NguoiDungRepository users,MaXacThucRepository tokens,PasswordEncoder encoder,EmailService email,NguoiDungMapper nguoiDungMapper,ThanhPhoRepository thanhPhos,PhuongXaRepository phuongXas,@Value("${app.jwt.key}") String key){
         this.users=users;this.tokens=tokens;this.encoder=encoder;this.email=email;this.nguoiDungMapper=nguoiDungMapper;this.key=key.getBytes(StandardCharsets.UTF_8);
+        this.thanhPhos=thanhPhos;this.phuongXas=phuongXas;
     }
 
     @Transactional
@@ -52,6 +56,35 @@ public class AccountSecurityService {
     @Transactional(readOnly=true)
     public HoSoNguoiDungResponse hoSo(Integer userId){
         NguoiDung user=layUser(userId);
+        return nguoiDungMapper.toHoSo(user);
+    }
+
+    @Transactional
+    public HoSoNguoiDungResponse capNhatHoSo(Integer userId, CapNhatHoSoRequest request){
+        NguoiDung user=layUser(userId);
+        String phone=request.soDienThoai()==null?null:request.soDienThoai().trim();
+        if((user.getSoDienThoai()==null||user.getSoDienThoai().isBlank())&&phone!=null&&!phone.isBlank()){
+            if(users.existsBySoDienThoai(phone)) throw new ResponseStatusException(HttpStatus.CONFLICT,"Số điện thoại đã được sử dụng.");
+            user.setSoDienThoai(phone);
+        }
+        if(request.idThanhPho()==null){
+            user.setThanhPho(null);
+            user.setPhuongXa(null);
+        } else {
+            var city=thanhPhos.findById(request.idThanhPho()).orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"Thành phố không tồn tại."));
+            user.setThanhPho(city);
+            if(request.idPhuongXa()==null) user.setPhuongXa(null);
+            else {
+                var ward=phuongXas.findById(request.idPhuongXa()).orElseThrow(()->new ResponseStatusException(HttpStatus.BAD_REQUEST,"Phường xã không tồn tại."));
+                if(!ward.getThanhPho().getId().equals(city.getId())) throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"Phường xã không thuộc thành phố đã chọn.");
+                user.setPhuongXa(ward);
+            }
+        }
+        user.setHoTen(request.hoTen().trim());
+        if(request.ngaySinh()!=null) user.setNgaySinh(request.ngaySinh());
+        if(request.gioiTinh()!=null&&!request.gioiTinh().isBlank()) user.setGioiTinh(request.gioiTinh().trim());
+        if(request.anhNguoiDung()!=null) user.setAnhNguoiDung(request.anhNguoiDung().isBlank()?null:request.anhNguoiDung().trim());
+        users.save(user);
         return nguoiDungMapper.toHoSo(user);
     }
 

@@ -42,6 +42,9 @@ public class DanhMuc extends BaseEntity {
     @Column(name = "moTa", length = 1000)
     private String moTa;
 
+    @Column(name = "AnhDanhMuc", length = 1000)
+    private String anhDanhMuc;
+
     @Column(name = "trangThai", nullable = false, length = 30)
     private String trangThai = "HoatDong";
 

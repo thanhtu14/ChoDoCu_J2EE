@@ -30,7 +30,7 @@ public class DongSanPham extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idDanhMuc", nullable = false)
-    private Integer idDanhMuc;
+    private DanhMuc danhMuc;
 
     @OneToMany(mappedBy = "dongSanPham")
     private List<DongCuThe> dongCuThes = new ArrayList<>();

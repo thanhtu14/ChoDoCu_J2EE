@@ -3,6 +3,7 @@ package com.company.chodocu.entity;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import jakarta.persistence.JoinColumn;
 @Setter
 @NoArgsConstructor
 @Entity
+@Table(name = "ThongBao")
 @AttributeOverride(name = "id", column = @Column(name = "idThongBao"))
 public class ThongBao extends BaseEntity {
 

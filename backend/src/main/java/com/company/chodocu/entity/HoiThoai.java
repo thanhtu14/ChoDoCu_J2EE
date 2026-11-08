@@ -30,6 +30,9 @@ public class HoiThoai extends BaseEntity {
     @Column(name = "ngayTao", nullable = false)
     private LocalDateTime ngayTao = LocalDateTime.now();
 
+    @Column(name = "TinNhanCuoi")
+    private LocalDateTime tinNhanCuoi;
+
     // 1 HoiThoai có nhiều TinNhan
     @OneToMany(mappedBy = "hoiThoai")
     private List<TinNhan> tinNhans = new ArrayList<>();

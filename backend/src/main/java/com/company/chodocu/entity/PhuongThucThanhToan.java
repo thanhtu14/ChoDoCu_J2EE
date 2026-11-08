@@ -29,6 +29,6 @@ public class PhuongThucThanhToan extends BaseEntity {
     @Column(name = "NgayTao", nullable = false)
     private LocalDateTime ngayTao = LocalDateTime.now();
 
-    @OneToMany(mappedBy = "PhuongThucThanhToan")
+    @OneToMany(mappedBy = "idPhuongThucThanhToan")
     private List<ThanhToan> thanhToans = new ArrayList<>();
 }

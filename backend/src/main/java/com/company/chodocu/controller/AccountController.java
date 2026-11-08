@@ -15,6 +15,7 @@ public class AccountController {
     private final AccountSecurityService service;
     public AccountController(AccountSecurityService service){this.service=service;}
     @GetMapping("/me") public HoSoNguoiDungResponse hoSo(@AuthenticationPrincipal String subject){return service.hoSo(id(subject));}
+    @PutMapping("/me") public HoSoNguoiDungResponse capNhatHoSo(@AuthenticationPrincipal String subject,@Valid @RequestBody CapNhatHoSoRequest request){return service.capNhatHoSo(id(subject),request);}
     @PostMapping("/me/doi-so-dien-thoai/yeu-cau") public Map<String,String> yeuCau(@AuthenticationPrincipal String subject,@Valid @RequestBody YeuCauDoiSoDienThoaiRequest request){
         service.yeuCauDoiSo(id(subject),request);return Map.of("message","Đã gửi mã xác nhận tới email của bạn.");
     }

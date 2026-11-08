@@ -25,7 +25,7 @@ public class Hang extends BaseEntity {
     @Column(name = "trangThai", nullable = false, length = 30)
     private TrangThaiHang trangThai = TrangThaiHang.HOAT_DONG;
 
-    @OneToMany(mappedBy = "hang")
+    @OneToMany(mappedBy = "idHang")
     private List<DongSanPham> dongSanPhams = new ArrayList<>();
 
     @OneToMany(mappedBy = "hang")

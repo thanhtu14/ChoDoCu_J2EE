@@ -17,7 +17,7 @@ import jakarta.persistence.ManyToOne;
 @Entity
 @Table(name = "AnhSanPham")
 @AttributeOverride(name = "id", column = @Column(name = "idAnhSanPham"))
-public class AnhSanPham {
+public class AnhSanPham extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "IdBaiDang", nullable = false)
     private BaiDang idBaiDang;

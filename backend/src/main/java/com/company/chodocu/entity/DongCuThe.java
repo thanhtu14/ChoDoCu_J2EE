@@ -28,7 +28,7 @@ public class DongCuThe extends BaseEntity {
     // nhiều dòng cụ thể thuộc về một dòng sản phẩm
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "idDongSanPham", nullable = false)
-    private Integer idDongSanPham;
+    private DongSanPham dongSanPham;
 
     @OneToMany(mappedBy = "dongCuThe")
     private List<SanPham> sanPhams = new ArrayList<>();

@@ -1,0 +1,15 @@
+ALTER TABLE NguoiDung ADD GoogleSubject NVARCHAR(255) NULL;
+CREATE UNIQUE INDEX UX_NguoiDung_GoogleSubject ON NguoiDung(GoogleSubject) WHERE GoogleSubject IS NOT NULL;
+
+CREATE TABLE MaXacThuc (
+  idMaXacThuc BIGINT IDENTITY(1,1) NOT NULL CONSTRAINT PK_MaXacThuc PRIMARY KEY,
+  idNguoiDung INT NOT NULL,
+  Loai NVARCHAR(30) NOT NULL,
+  MaHash NVARCHAR(64) NOT NULL,
+  DuLieu NVARCHAR(254) NULL,
+  SoLanSai INT NOT NULL CONSTRAINT DF_MaXacThuc_SoLanSai DEFAULT 0,
+  NgayTao DATETIME2 NOT NULL,
+  NgayHetHan DATETIME2 NOT NULL,
+  CONSTRAINT FK_MaXacThuc_NguoiDung FOREIGN KEY(idNguoiDung) REFERENCES NguoiDung(idNguoiDung)
+);
+CREATE INDEX IX_MaXacThuc_User_Type ON MaXacThuc(idNguoiDung,Loai);

@@ -17,6 +17,19 @@ public class NguoiDung extends BaseEntity {
     @Column(name = "AnhNguoiDung")
     private String anhNguoiDung;
 
+    @Column(name = "Email", unique = true, length = 254)
+    private String email;
+
+    @Column(name = "MatKhauHash", length = 100)
+    private String matKhauHash;
+
+    @Column(name = "GoogleSubject", length = 255, unique = true)
+    private String googleSubject;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "NguoiDung_VaiTro", joinColumns = @JoinColumn(name = "idNguoiDung"), inverseJoinColumns = @JoinColumn(name = "idVaiTro"))
+    private java.util.Set<VaiTro> vaiTros = new java.util.LinkedHashSet<>();
+
     // int? trong C# -> cho phép null
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "IdThanhPho")

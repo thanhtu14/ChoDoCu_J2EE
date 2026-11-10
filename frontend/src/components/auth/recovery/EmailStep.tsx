@@ -43,7 +43,11 @@ export default function EmailStep({ initialEmail, onSent }: Props) {
         title="Khôi phục mật khẩu"
         subtitle="Nhập địa chỉ email đã đăng ký để nhận mã xác thực (OTP) đặt lại mật khẩu của bạn."
       />
-      <form className="w-full text-left flex flex-col gap-space-lg" onSubmit={submit} noValidate>
+      <form
+        className="w-full text-left flex flex-col gap-space-lg"
+        onSubmit={submit}
+        noValidate
+      >
         <AuthField
           id="recovery-email"
           label="Email"
@@ -55,9 +59,15 @@ export default function EmailStep({ initialEmail, onSent }: Props) {
           value={email}
           onChange={(e) => setEmail(e.target.value)}
         />
-        <InfoNote>Mã OTP gồm 6 chữ số sẽ được gửi tới email của bạn trong vòng vài giây.</InfoNote>
+        <InfoNote>
+          Mã OTP gồm 6 chữ số sẽ được gửi tới email của bạn trong vòng vài giây.
+        </InfoNote>
         {error && <FormAlert message={error} />}
-        <SubmitButton busy={busy} label="Gửi mã xác thực" busyLabel="Đang gửi mã…" />
+        <SubmitButton
+          busy={busy}
+          label="Gửi mã xác thực"
+          busyLabel="Đang gửi mã…"
+        />
       </form>
     </>
   );

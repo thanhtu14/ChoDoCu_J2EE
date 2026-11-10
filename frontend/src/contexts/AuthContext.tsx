@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import { authApi } from "../api/auth";
 import { AUTH_EXPIRED_EVENT, TOKEN_KEY, USER_KEY } from "../api/client";
 import type { AuthResponse, DangKyRequest, DangNhapRequest } from "../types";
@@ -22,7 +30,9 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 function readStoredUser(): AuthResponse | null {
   try {
     const raw = localStorage.getItem(USER_KEY);
-    return raw && localStorage.getItem(TOKEN_KEY) ? (JSON.parse(raw) as AuthResponse) : null;
+    return raw && localStorage.getItem(TOKEN_KEY)
+      ? (JSON.parse(raw) as AuthResponse)
+      : null;
   } catch {
     return null;
   }
@@ -53,9 +63,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const login = useCallback(async (data: DangNhapRequest) => save(await authApi.dangNhap(data)), [save]);
-  const loginWithGoogle = useCallback(async (idToken: string) => save(await authApi.dangNhapGoogle(idToken)), [save]);
-  const register = useCallback(async (data: DangKyRequest) => save(await authApi.dangKy(data)), [save]);
+  const login = useCallback(
+    async (data: DangNhapRequest) => save(await authApi.dangNhap(data)),
+    [save],
+  );
+  const loginWithGoogle = useCallback(
+    async (idToken: string) => save(await authApi.dangNhapGoogle(idToken)),
+    [save],
+  );
+  const register = useCallback(
+    async (data: DangKyRequest) => save(await authApi.dangKy(data)),
+    [save],
+  );
 
   // Token hết hạn: interceptor phát sự kiện, ở đây đăng xuất và báo cho người dùng.
   useEffect(() => {

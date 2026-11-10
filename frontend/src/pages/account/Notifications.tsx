@@ -14,7 +14,10 @@ export default function Notifications() {
   const toast = useToast();
   const { refresh } = useNotifications();
   const [page, setPage] = useState(1);
-  const { data, loading, error, reload } = useFetch(() => thongBaoApi.danhSach(page, 15), [page]);
+  const { data, loading, error, reload } = useFetch(
+    () => thongBaoApi.danhSach(page, 15),
+    [page],
+  );
 
   const markRead = async (id: number) => {
     try {
@@ -34,24 +37,38 @@ export default function Notifications() {
       {loading && !data ? (
         <Spinner />
       ) : error ? (
-        <ErrorBox message={error} onRetry={reload} />
+        <ErrorBox
+          message={error}
+          onRetry={reload}
+        />
       ) : !data || data.items.length === 0 ? (
-        <Empty title="Chưa có thông báo nào">Khi tin của bạn được duyệt hoặc có người nhắn, thông báo sẽ hiện ở đây.</Empty>
+        <Empty title="Chưa có thông báo nào">
+          Khi tin của bạn được duyệt hoặc có người nhắn, thông báo sẽ hiện ở đây.
+        </Empty>
       ) : (
         <>
           <ul className="list panel">
             {data.items.map((n) => {
               const unread = n.trangThai === "ChuaDoc";
               return (
-                <li key={n.id} className={`list-item ${unread ? "is-unread" : ""}`}>
-                  <span className="dot" aria-hidden="true" />
+                <li
+                  key={n.id}
+                  className={`list-item ${unread ? "is-unread" : ""}`}
+                >
+                  <span
+                    className="dot"
+                    aria-hidden="true"
+                  />
                   <div style={{ flex: 1 }}>
                     <strong>{n.tieuDe}</strong>
                     {n.noiDung && <p className="muted">{n.noiDung}</p>}
                     <span className="hint">{timeAgo(n.ngayTao)}</span>
                   </div>
                   {unread && (
-                    <button className="btn btn-ghost btn-sm" onClick={() => void markRead(n.id)}>
+                    <button
+                      className="btn btn-ghost btn-sm"
+                      onClick={() => void markRead(n.id)}
+                    >
                       Đánh dấu đã đọc
                     </button>
                   )}
@@ -59,7 +76,11 @@ export default function Notifications() {
               );
             })}
           </ul>
-          <Pagination page={data.page} totalPages={data.totalPages} onChange={setPage} />
+          <Pagination
+            page={data.page}
+            totalPages={data.totalPages}
+            onChange={setPage}
+          />
         </>
       )}
     </>

@@ -18,7 +18,8 @@ export default function AdminApprove() {
   const load = async (e: FormEvent) => {
     e.preventDefault();
     const n = Number(id);
-    if (!Number.isInteger(n) || n <= 0) return toast("Mã tin phải là số nguyên dương.", "error");
+    if (!Number.isInteger(n) || n <= 0)
+      return toast("Mã tin phải là số nguyên dương.", "error");
     setBusy(true);
     try {
       setPost(await baiDangApi.chiTiet(n));
@@ -47,29 +48,65 @@ export default function AdminApprove() {
   return (
     <div className="stack">
       <h1>Duyệt bài</h1>
-      <form className="row" onSubmit={load}>
+      <form
+        className="row"
+        onSubmit={load}
+      >
         <div className="field">
           <label htmlFor="id">Mã tin đăng</label>
-          <input id="id" inputMode="numeric" value={id} onChange={(e) => setId(e.target.value)} required />
+          <input
+            id="id"
+            inputMode="numeric"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+            required
+          />
         </div>
-        <button className="btn" disabled={busy}>Mở tin</button>
+        <button
+          className="btn"
+          disabled={busy}
+        >
+          Mở tin
+        </button>
       </form>
 
       {post && (
         <div className="panel stack">
           <h2>{post.tieuDe}</h2>
-          <p><span className="price-tag">{formatPrice(post.giaTien)}</span></p>
+          <p>
+            <span className="price-tag">{formatPrice(post.giaTien)}</span>
+          </p>
           <p className="prose">{post.noiDung}</p>
           <p className="muted">
             {post.tenNguoiDang} · {post.tenDanhMuc} · {post.diaChi}
           </p>
           <p>
-            Trạng thái: <span className="badge">{TRANG_THAI_BAI_DANG[post.trangThai] ?? post.trangThai}</span>
+            Trạng thái:{" "}
+            <span className="badge">
+              {TRANG_THAI_BAI_DANG[post.trangThai] ?? post.trangThai}
+            </span>
           </p>
           <div className="row">
-            <button className="btn btn-ok" disabled={busy} onClick={() => void act("duyet")}>Duyệt</button>
-            <button className="btn btn-danger" disabled={busy} onClick={() => void act("tuChoi")}>Từ chối</button>
-            <Link to={`/bai-dang/${post.id}`} className="btn btn-ghost">Xem trang tin</Link>
+            <button
+              className="btn btn-ok"
+              disabled={busy}
+              onClick={() => void act("duyet")}
+            >
+              Duyệt
+            </button>
+            <button
+              className="btn btn-danger"
+              disabled={busy}
+              onClick={() => void act("tuChoi")}
+            >
+              Từ chối
+            </button>
+            <Link
+              to={`/bai-dang/${post.id}`}
+              className="btn btn-ghost"
+            >
+              Xem trang tin
+            </Link>
           </div>
         </div>
       )}

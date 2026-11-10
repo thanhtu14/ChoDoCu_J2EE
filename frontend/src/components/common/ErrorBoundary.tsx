@@ -20,11 +20,21 @@ export default class ErrorBoundary extends Component<{ children: ReactNode }, St
     if (!this.state.error) return this.props.children;
     return (
       <div className="container page">
-        <div className="state state-error" role="alert">
+        <div
+          className="state state-error"
+          role="alert"
+        >
           <strong>Trang gặp lỗi khi hiển thị</strong>
           <p>{this.state.error.message}</p>
-          <p className="hint">Nếu lỗi nhắc tới dữ liệu API, hãy kiểm tra BE đã chạy và VITE_PROXY_TARGET trong file .env.</p>
-          <button type="button" className="btn" onClick={() => window.location.reload()}>
+          <p className="hint">
+            Nếu lỗi nhắc tới dữ liệu API, hãy kiểm tra BE đã chạy và VITE_PROXY_TARGET
+            trong file .env.
+          </p>
+          <button
+            type="button"
+            className="btn"
+            onClick={() => window.location.reload()}
+          >
             Tải lại trang
           </button>
         </div>

@@ -7,7 +7,12 @@ interface Props {
 }
 
 /** Icon font Material Symbols (font nạp trong index.html). Luôn ẩn với trình đọc màn hình. */
-export default function MaterialIcon({ name, size = 20, filled = false, className = "" }: Props) {
+export default function MaterialIcon({
+  name,
+  size = 20,
+  filled = false,
+  className = "",
+}: Props) {
   return (
     <span
       aria-hidden="true"

@@ -4,7 +4,11 @@ const CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const SCRIPT_SRC = "https://accounts.google.com/gsi/client";
 
 interface GoogleId {
-  initialize: (config: { client_id: string; callback: (res: { credential?: string }) => void; ux_mode?: string }) => void;
+  initialize: (config: {
+    client_id: string;
+    callback: (res: { credential?: string }) => void;
+    ux_mode?: string;
+  }) => void;
   renderButton: (el: HTMLElement, options: Record<string, unknown>) => void;
 }
 declare global {
@@ -52,7 +56,8 @@ export default function GoogleLoginButton({ onCredential, onError }: Props) {
   useEffect(() => {
     const el = box.current;
     if (!el) return;
-    const measure = () => setWidth(Math.min(400, Math.floor(el.getBoundingClientRect().width)));
+    const measure = () =>
+      setWidth(Math.min(400, Math.floor(el.getBoundingClientRect().width)));
     measure();
     const ro = new ResizeObserver(measure);
     ro.observe(el);
@@ -74,7 +79,16 @@ export default function GoogleLoginButton({ onCredential, onError }: Props) {
           },
         });
         el.innerHTML = "";
-        window.google.accounts.id.renderButton(el, { type: "standard", theme: "outline", size: "large", text: "signin_with", shape: "rectangular", logo_alignment: "center", locale: "vi", width });
+        window.google.accounts.id.renderButton(el, {
+          type: "standard",
+          theme: "outline",
+          size: "large",
+          text: "signin_with",
+          shape: "rectangular",
+          logo_alignment: "center",
+          locale: "vi",
+          width,
+        });
       })
       .catch((e: Error) => handlers.current.onError(e.message));
     return () => {
@@ -82,5 +96,11 @@ export default function GoogleLoginButton({ onCredential, onError }: Props) {
     };
   }, [width]);
 
-  return <div ref={box} className="w-full min-h-10 flex justify-center" aria-label="Đăng nhập bằng Google" />;
+  return (
+    <div
+      ref={box}
+      className="w-full min-h-10 flex justify-center"
+      aria-label="Đăng nhập bằng Google"
+    />
+  );
 }

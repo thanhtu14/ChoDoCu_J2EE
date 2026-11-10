@@ -203,6 +203,10 @@ export interface DichVu {
   tenDichVu: string;
   gia: number;
   thoiGianDichVu: number;
+  luotDay: number;
+  luotDang: number;
+  ngayTao: string;
+  trangThai: string;
 }
 export interface MuaDichVuResponse {
   idMuaDichVu: number;

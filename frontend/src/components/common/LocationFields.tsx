@@ -4,7 +4,12 @@ import { useFetch } from "../../hooks/useFetch";
 interface Props {
   idThanhPho: number | undefined;
   idPhuongXa: number | undefined;
-  onChange: (value: { idThanhPho?: number; idPhuongXa?: number; tenThanhPho?: string; tenPhuongXa?: string }) => void;
+  onChange: (value: {
+    idThanhPho?: number;
+    idPhuongXa?: number;
+    tenThanhPho?: string;
+    tenPhuongXa?: string;
+  }) => void;
   showWard?: boolean;
   cityPlaceholder?: string;
   required?: boolean;
@@ -36,12 +41,19 @@ export default function LocationFields({
         value={idThanhPho ?? ""}
         onChange={(e) => {
           const id = e.target.value ? Number(e.target.value) : undefined;
-          onChange({ idThanhPho: id, idPhuongXa: undefined, tenThanhPho: cityList.find((c) => c.id === id)?.tenThanhPho });
+          onChange({
+            idThanhPho: id,
+            idPhuongXa: undefined,
+            tenThanhPho: cityList.find((c) => c.id === id)?.tenThanhPho,
+          });
         }}
       >
         <option value="">{cityPlaceholder}</option>
         {cityList.map((c) => (
-          <option key={c.id} value={c.id}>
+          <option
+            key={c.id}
+            value={c.id}
+          >
             {c.tenThanhPho}
           </option>
         ))}
@@ -63,7 +75,10 @@ export default function LocationFields({
         >
           <option value="">Phường/xã (không bắt buộc)</option>
           {wardList.map((w) => (
-            <option key={w.id} value={w.id}>
+            <option
+              key={w.id}
+              value={w.id}
+            >
               {w.tenPhuongXa}
             </option>
           ))}

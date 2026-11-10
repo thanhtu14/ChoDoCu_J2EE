@@ -24,7 +24,13 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(false);
 
-  if (user) return <Navigate to={from} replace />;
+  if (user)
+    return (
+      <Navigate
+        to={from}
+        replace
+      />
+    );
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
@@ -58,7 +64,10 @@ export default function LoginPage() {
         title="Chào mừng trở lại!"
         subtitle="Đăng nhập để tiếp tục quản lý tin và giao dịch mua bán"
       />
-      <form className="flex flex-col gap-space-lg" onSubmit={submit}>
+      <form
+        className="flex flex-col gap-space-lg"
+        onSubmit={submit}
+      >
         {error && <FormAlert message={error} />}
         <AuthField
           id="email"
@@ -82,15 +91,27 @@ export default function LoginPage() {
           value={matKhau}
           onChange={(e) => setMatKhau(e.target.value)}
         />
-        <SubmitButton busy={busy} label="Đăng nhập" busyLabel="Đang đăng nhập…" />
+        <SubmitButton
+          busy={busy}
+          label="Đăng nhập"
+          busyLabel="Đang đăng nhập…"
+        />
       </form>
 
-      <AuthSwitchPrompt text="Quên mật khẩu?" linkText="Khôi phục ngay" to="/quen-mat-khau" />
+      <AuthSwitchPrompt
+        text="Quên mật khẩu?"
+        linkText="Khôi phục ngay"
+        to="/quen-mat-khau"
+      />
 
       <AuthDivider text="Hoặc tiếp tục với" />
       <SocialLoginButtons onGoogleCredential={(t) => void onGoogle(t)} />
 
-      <AuthSwitchPrompt text="Chưa có tài khoản?" linkText="Đăng ký ngay" to="/dang-ky" />
+      <AuthSwitchPrompt
+        text="Chưa có tài khoản?"
+        linkText="Đăng ký ngay"
+        to="/dang-ky"
+      />
     </>
   );
 }

@@ -19,7 +19,8 @@ export default function UserMenu() {
   }, [pathname]);
   useEffect(() => {
     const onDown = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) ref.current.removeAttribute("open");
+      if (ref.current && !ref.current.contains(e.target as Node))
+        ref.current.removeAttribute("open");
     };
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
@@ -32,13 +33,19 @@ export default function UserMenu() {
         aria-label="Đăng nhập"
         className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0 text-on-primary hover:bg-on-primary-fixed-variant transition-colors"
       >
-        <MaterialIcon name="person" size={20} />
+        <MaterialIcon
+          name="person"
+          size={20}
+        />
       </Link>
     );
   }
 
   return (
-    <details ref={ref} className="relative shrink-0">
+    <details
+      ref={ref}
+      className="relative shrink-0"
+    >
       <summary
         aria-label="Tài khoản"
         className="list-none cursor-pointer w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center font-button-text text-button-text [&::-webkit-details-marker]:hidden"
@@ -47,32 +54,85 @@ export default function UserMenu() {
       </summary>
       <div className="absolute right-0 top-full mt-space-sm w-64 p-space-sm bg-surface-container-lowest rounded-xl shadow-[0_8px_30px_rgba(0,0,0,0.12)] z-50">
         <div className="px-space-md pt-space-xs pb-space-sm mb-space-xs border-b border-surface-variant">
-          <strong className="block font-button-text text-button-text text-on-surface truncate">{user.hoTen}</strong>
-          <span className="font-caption text-caption text-on-surface-variant">Vai trò: {user.role}</span>
+          <strong className="block font-button-text text-button-text text-on-surface truncate">
+            {user.hoTen}
+          </strong>
+          <span className="font-caption text-caption text-on-surface-variant">
+            Vai trò: {user.role}
+          </span>
         </div>
         {isStaff && (
-          <Link to="/quan-tri" className={itemClass}>
-            <MaterialIcon name="admin_panel_settings" size={20} /> Trang quản trị
+          <Link
+            to="/quan-tri"
+            className={itemClass}
+          >
+            <MaterialIcon
+              name="admin_panel_settings"
+              size={20}
+            />{" "}
+            Trang quản trị
           </Link>
         )}
-        <Link to="tai-khoan/ho-so" className={itemClass}>
-          <MaterialIcon name="person" size={20} /> Hồ sơ của tôi
+        <Link
+          to="tai-khoan/ho-so"
+          className={itemClass}
+        >
+          <MaterialIcon
+            name="person"
+            size={20}
+          />{" "}
+          Hồ sơ của tôi
         </Link>
-        <Link to="tai-khoan/quan-ly-tin" className={itemClass}>
-          <MaterialIcon name="list" size={20} /> Quản lý tin đăng
+        <Link
+          to="tai-khoan/quan-ly-tin"
+          className={itemClass}
+        >
+          <MaterialIcon
+            name="list"
+            size={20}
+          />{" "}
+          Quản lý tin đăng
         </Link>
-        <Link to="tai-khoan/yeu-thich" className={itemClass}>
-          <MaterialIcon name="favorite" size={20} /> Tin đã lưu
+        <Link
+          to="tai-khoan/yeu-thich"
+          className={itemClass}
+        >
+          <MaterialIcon
+            name="favorite"
+            size={20}
+          />{" "}
+          Tin đã lưu
         </Link>
-        <Link to="tai-khoan/doi-mat-khau" className={itemClass}>
-          <MaterialIcon name="key" size={20} /> Đổi mật khẩu
+        <Link
+          to="tai-khoan/doi-mat-khau"
+          className={itemClass}
+        >
+          <MaterialIcon
+            name="key"
+            size={20}
+          />{" "}
+          Đổi mật khẩu
         </Link>
         {/* Các lối tắt bị ẩn khỏi thanh nav ở màn hình nhỏ thì nằm trong menu này. */}
-        <Link to="/tin-nhan" className={`${itemClass} sm:hidden`}>
-          <MaterialIcon name="chat" size={20} /> Tin nhắn
+        <Link
+          to="/tin-nhan"
+          className={`${itemClass} sm:hidden`}
+        >
+          <MaterialIcon
+            name="chat"
+            size={20}
+          />{" "}
+          Tin nhắn
         </Link>
-        <Link to="/dich-vu" className={`${itemClass} lg:hidden`}>
-          <MaterialIcon name="rocket_launch" size={20} /> Dịch vụ đẩy tin
+        <Link
+          to="/dich-vu"
+          className={`${itemClass} lg:hidden`}
+        >
+          <MaterialIcon
+            name="rocket_launch"
+            size={20}
+          />{" "}
+          Dịch vụ đẩy tin
         </Link>
         <button
           type="button"
@@ -82,7 +142,11 @@ export default function UserMenu() {
             navigate("/");
           }}
         >
-          <MaterialIcon name="logout" size={20} /> Đăng xuất
+          <MaterialIcon
+            name="logout"
+            size={20}
+          />{" "}
+          Đăng xuất
         </button>
       </div>
     </details>

@@ -68,7 +68,8 @@ export default function PasswordByEmail() {
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     if (!/^\d{6}$/.test(code)) return setError("Mã xác nhận gồm 6 chữ số.");
-    if (moi.length < MIN_LENGTH) return setError(`Mật khẩu mới tối thiểu ${MIN_LENGTH} ký tự.`);
+    if (moi.length < MIN_LENGTH)
+      return setError(`Mật khẩu mới tối thiểu ${MIN_LENGTH} ký tự.`);
     if (moi !== xacNhan) return setError("Hai mật khẩu mới chưa khớp nhau.");
     setError("");
     setBusy(true);
@@ -88,25 +89,38 @@ export default function PasswordByEmail() {
 
   return (
     <Card className="p-space-xl">
-      <form onSubmit={submit} className="flex flex-col gap-space-lg">
+      <form
+        onSubmit={submit}
+        className="flex flex-col gap-space-lg"
+      >
         <div className="flex items-start gap-space-md">
           <span className="w-10 h-10 rounded-lg bg-primary-container text-on-primary flex items-center justify-center shrink-0">
-            <MaterialIcon name="forward_to_inbox" size={22} />
+            <MaterialIcon
+              name="forward_to_inbox"
+              size={22}
+            />
           </span>
           <div>
-            <h2 className="m-0 font-headline-2 text-headline-2 text-on-surface">Đổi mật khẩu bằng mã gửi qua email</h2>
+            <h2 className="m-0 font-headline-2 text-headline-2 text-on-surface">
+              Đổi mật khẩu bằng mã gửi qua email
+            </h2>
             <p className="m-0 mt-space-2xs font-body-2 text-body-2 text-on-surface-variant">
-              Phù hợp khi bạn quên mật khẩu hiện tại hoặc tài khoản đăng nhập bằng Google. Mã gồm 6 số, chỉ có hiệu lực trong vài phút.
+              Phù hợp khi bạn quên mật khẩu hiện tại hoặc tài khoản đăng nhập bằng Google.
+              Mã gồm 6 số, chỉ có hiệu lực trong vài phút.
             </p>
           </div>
         </div>
 
         {loading ? (
-          <p className="m-0 font-body-2 text-body-2 text-on-surface-variant">Đang tải email tài khoản…</p>
+          <p className="m-0 font-body-2 text-body-2 text-on-surface-variant">
+            Đang tải email tài khoản…
+          </p>
         ) : email ? (
           <div className="rounded-xl bg-surface-container-low p-space-md font-body-2 text-body-2 text-on-surface">
             {sent ? "Đã gửi mã tới " : "Mã sẽ được gửi tới "}
-            <strong className="font-caption-bold text-caption-bold">{maskEmail(email)}</strong>
+            <strong className="font-caption-bold text-caption-bold">
+              {maskEmail(email)}
+            </strong>
             {sent && ". Kiểm tra cả hộp thư rác nếu chưa thấy."}
           </div>
         ) : (
@@ -126,8 +140,23 @@ export default function PasswordByEmail() {
               value={code}
               onChange={(e) => setCode(e.target.value.replace(/\D/g, ""))}
             />
-            <PasswordInput id="mat-khau-moi-email" label="Mật khẩu mới" required autoComplete="new-password" value={moi} onChange={(e) => setMoi(e.target.value)} hint={`Tối thiểu ${MIN_LENGTH} ký tự.`} />
-            <PasswordInput id="xac-nhan-email" label="Xác nhận mật khẩu mới" required autoComplete="new-password" value={xacNhan} onChange={(e) => setXacNhan(e.target.value)} />
+            <PasswordInput
+              id="mat-khau-moi-email"
+              label="Mật khẩu mới"
+              required
+              autoComplete="new-password"
+              value={moi}
+              onChange={(e) => setMoi(e.target.value)}
+              hint={`Tối thiểu ${MIN_LENGTH} ký tự.`}
+            />
+            <PasswordInput
+              id="xac-nhan-email"
+              label="Xác nhận mật khẩu mới"
+              required
+              autoComplete="new-password"
+              value={xacNhan}
+              onChange={(e) => setXacNhan(e.target.value)}
+            />
           </>
         )}
 
@@ -139,18 +168,38 @@ export default function PasswordByEmail() {
               type="button"
               onClick={sendCode}
               disabled={busy || loading || !email}
-              className={sent ? "h-12 px-space-lg rounded-xl border-0 cursor-pointer bg-surface-container-high hover:bg-surface-variant font-button-text text-button-text text-on-surface disabled:opacity-70" : btn}
+              className={
+                sent
+                  ? "h-12 px-space-lg rounded-xl border-0 cursor-pointer bg-surface-container-high hover:bg-surface-variant font-button-text text-button-text text-on-surface disabled:opacity-70"
+                  : btn
+              }
             >
-              <MaterialIcon name="mail" size={18} />
+              <MaterialIcon
+                name="mail"
+                size={18}
+              />
               {sent ? "Gửi lại mã" : "Gửi mã qua email"}
             </button>
           )}
           {sent && cooldown > 0 && (
-            <span className="self-center font-caption text-caption text-on-surface-variant" aria-live="polite">Gửi lại mã sau {cooldown}s</span>
+            <span
+              className="self-center font-caption text-caption text-on-surface-variant"
+              aria-live="polite"
+            >
+              Gửi lại mã sau {cooldown}s
+            </span>
           )}
           {sent && (
-            <button type="submit" disabled={busy} className={btn}>
-              <MaterialIcon name={busy ? "progress_activity" : "shield_lock"} size={18} className={busy ? "animate-spin" : ""} />
+            <button
+              type="submit"
+              disabled={busy}
+              className={btn}
+            >
+              <MaterialIcon
+                name={busy ? "progress_activity" : "shield_lock"}
+                size={18}
+                className={busy ? "animate-spin" : ""}
+              />
               {busy ? "Đang cập nhật…" : "Lưu mật khẩu mới"}
             </button>
           )}

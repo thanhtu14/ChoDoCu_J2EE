@@ -4,11 +4,13 @@ import AuthShowcase from "./AuthShowcase";
 const COPY = {
   login: {
     title: "Chào mừng trở lại với Chợ Đồ Cũ!",
-    description: "Tiếp tục quản lý tin đăng, theo dõi đơn hàng và kết nối với hàng nghìn người mua bán sôi động trên toàn quốc.",
+    description:
+      "Tiếp tục quản lý tin đăng, theo dõi đơn hàng và kết nối với hàng nghìn người mua bán sôi động trên toàn quốc.",
   },
   register: {
     title: "Tham gia Chợ Đồ Cũ ngay hôm nay!",
-    description: "Tạo tài khoản để đăng tin, lưu tin yêu thích và nhắn trực tiếp cho người bán.",
+    description:
+      "Tạo tài khoản để đăng tin, lưu tin yêu thích và nhắn trực tiếp cho người bán.",
   },
 };
 

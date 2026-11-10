@@ -1042,6 +1042,42 @@ tr:last-child td {
   font-weight: 700;
 }
 
+/* Trang chủ theo bố cục tham chiếu: nền xám sáng, banner cam, các dải tin gọn. */
+.home-page { gap: 24px; padding-top: 16px; }
+.home-page > section { min-width: 0; }
+.home-page > section:first-child { padding-block: 26px; border-radius: 14px; }
+.home-page [aria-label="Tìm kiếm nhanh"] { padding: 14px 18px; border: 1px solid #eee8e5; }
+.home-page [aria-label="Tìm kiếm nhanh"] > div:first-child p { display: none; }
+.home-page [aria-label="Tìm kiếm nhanh"] form { margin-top: 10px; padding: 6px; }
+.home-page [aria-label="Tìm kiếm nhanh"] form + div { display: none; }
+.home-page [aria-labelledby="cat-title"] > div:nth-child(2) { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 10px; }
+.home-page [aria-labelledby="cat-title"] > div:nth-child(2) > a { gap: 8px; padding: 12px 8px; border: 1px solid #eee8e5; }
+.home-page [aria-labelledby="cat-title"] > div:nth-child(2) > a > span:first-child { width: 38px; height: 38px; }
+.home-page [aria-labelledby="cat-title"] > div:first-child { margin-bottom: 10px; }
+.home-page [aria-labelledby="latest-title"] > div:first-child { align-items: center; }
+.home-page [aria-labelledby="latest-title"] > div:last-child { margin-top: 12px; }
+.home-page [aria-labelledby="rec-title"] > div:first-child { align-items: center; }
+.home-page [aria-labelledby="rec-title"] > div:last-child { margin-top: 14px; }
+.home-page [aria-labelledby="rec-title"] article { border: 1px solid #eee8e5; border-radius: 10px; }
+.home-page [aria-labelledby="rec-title"] article > a:first-child { aspect-ratio: 1.55 / 1; }
+.home-page [aria-labelledby="rec-title"] article > div { gap: 5px; padding: 10px; }
+.home-trust { padding: 22px; border: 1px solid #eee8e5; border-radius: 14px; background: #fff; }
+.home-trust h2 { margin: 0 0 14px; text-align: center; font-size: 1.2rem; }
+.home-trust-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.home-trust-grid article { display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 4px 10px; padding: 12px; border-radius: 10px; background: #faf7f5; }
+.home-trust-grid article > span { grid-row: span 2; display: grid; place-items: center; width: 34px; height: 34px; border-radius: 9px; color: var(--brand-strong); background: var(--brand-soft); font-family: "Material Symbols Outlined"; font-size: 20px; }
+.home-trust-grid strong { font-size: .85rem; }
+.home-trust-grid p { color: var(--ink-3); font-size: .76rem; line-height: 1.4; }
+body:has(.home-page) { background: #f4f4f5; }
+body:has(.home-page) footer { border-top: 1px solid #eee8e5; }
+
+@media (max-width: 720px) {
+  .home-page { gap: 18px; padding-top: 12px; }
+  .home-page [aria-labelledby="cat-title"] > div:nth-child(2) { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .home-trust { padding: 16px; }
+  .home-trust-grid { grid-template-columns: 1fr; }
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
   .hero,
@@ -1091,3 +1127,73 @@ tr:last-child td {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Trang dịch vụ: bảng giá và lịch sử giao dịch theo thiết kế tham chiếu. */
+.service-page { display: grid; gap: 28px; width:100%; max-width:100%; min-width:0; padding:0 0 24px; overflow:hidden; }
+.service-hero { position: relative; min-height: 220px; display: flex; align-items: center; overflow: hidden; padding: 28px 38px; border-radius: 16px; color: #fff; background: radial-gradient(ellipse at 88% 18%, rgba(255,190,83,.5), transparent 25%), linear-gradient(110deg,#ff7620 0%,#ff5b05 68%,#f04f08 100%); box-shadow: 0 10px 22px rgba(255,91,5,.16); }
+.service-hero::after { content:""; position:absolute; inset:auto -55px -110px auto; width:280px; height:280px; border:1px solid rgba(255,255,255,.12); border-radius:50%; box-shadow:0 0 0 28px rgba(255,255,255,.035),0 0 0 58px rgba(255,255,255,.025); }
+.service-hero-content { position:relative; z-index:1; }
+.service-pill { display:inline-flex; align-items:center; gap:5px; padding:6px 11px; border-radius:99px; background:rgba(255,255,255,.2); font-size:13px; font-weight:700; }
+.service-hero h1 { margin:10px 0 7px; color:white; font-size:clamp(1.8rem,3.2vw,2.5rem); line-height:1.08; letter-spacing:-.035em; }
+.service-hero p { color:rgba(255,255,255,.9); font-size:14px; line-height:1.6; }
+.service-proof { display:flex; flex-wrap:wrap; gap:14px; margin-top:12px; }
+.service-proof span { display:flex; align-items:center; gap:4px; font-size:12px; font-weight:600; }
+.service-rocket { position:absolute; right:50px; bottom:7px; color:rgba(255,255,255,.14); transform:rotate(-12deg); }
+.service-spark { position:absolute; right:27%; top:29px; color:rgba(255,255,255,.22); }
+.service-plans-section { min-width:0; max-width:100%; padding:0 4px; }
+.service-heading { text-align:center; margin-bottom:14px; }
+.service-heading h2 { font-size:30px; letter-spacing:-.02em; }
+.service-heading p { margin-top:5px; color:#8b8582; font-size:13px; }
+.service-periods { display:flex; justify-content:center; margin:0 auto 16px; width:max-content; max-width:100%; padding:3px; background:#f0eeed; border-radius:9px; overflow-x:auto; }
+.service-periods button { border:0; padding:8px 13px; background:transparent; color:#68615e; border-radius:7px; font-size:12px; cursor:pointer; transition:background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .2s ease; }
+.service-periods button:hover { background:var(--brand-soft); color:var(--brand-strong); box-shadow:0 3px 9px rgba(153,71,0,.12); transform:translateY(-1px); }
+.service-periods button:focus-visible { outline:2px solid var(--brand); outline-offset:2px; }
+.service-periods button.is-active { background:white; color:var(--brand-strong); box-shadow:0 1px 4px #00000012; font-weight:800; }
+.service-periods button.is-active:hover { background:#fff; box-shadow:0 3px 10px rgba(153,71,0,.16); }
+.service-periods button span { margin-left:5px; color:#e85918; font-size:10px; font-weight:700; }
+.service-periods button span.hot { color:#df4810; }
+@media (prefers-reduced-motion: reduce) { .service-periods button { transition:none; } }
+.service-payment { display:flex; justify-content:flex-end; align-items:center; gap:8px; margin:0 0 10px; }
+.service-payment label { color:#77706d; font-size:10px; }
+.service-payment select { width:auto; min-height:30px; padding:4px 22px 4px 8px; font-size:10px; }
+.service-plans-viewport { width:100%; max-width:100%; min-width:0; overflow-x:auto; overflow-y:hidden; padding:12px 2px 10px; scroll-snap-type:x mandatory; scrollbar-width:thin; scrollbar-color:#d6d0cc transparent; overscroll-behavior-inline:contain; }
+.service-plans { --service-card-width:calc((100% - 42px) / 4); display:grid; grid-auto-flow:column; grid-auto-columns:var(--service-card-width); grid-template-rows:1fr; gap:14px; align-items:stretch; width:100%; min-width:0; }
+.service-plans-count-1, .service-plans-count-2, .service-plans-count-3 { justify-content:center; }
+.service-plan-card { position:relative; z-index:0; display:flex; flex-direction:column; min-width:0; min-height:390px; padding:20px 17px 17px; border:1px solid var(--line); border-radius:var(--radius); background:var(--card); box-shadow:var(--shadow); scroll-snap-align:start; transform:translateY(0) scale(1); transform-origin:center; transition:transform .24s ease, border-color .24s ease, box-shadow .24s ease, background-color .24s ease; }
+.service-plan-card:hover, .service-plan-card:focus-within { z-index:2; border-color:var(--brand); background:#fffdfa; box-shadow:0 10px 24px rgba(255,122,0,.18); transform:translateY(-5px) scale(1.025); }
+.service-plan-top { display:flex; align-items:center; justify-content:space-between; gap:4px; padding-bottom:8px; border-bottom:1px solid #f0edeb; }
+.service-plan-top span { color:var(--brand-strong); font-size:13px; font-weight:800; }
+.service-plan-top small { color:#8b8582; font-size:10px; text-align:right; }
+.service-plan-title { display:flex; align-items:center; justify-content:space-between; gap:4px; margin-top:9px; }
+.service-plan-title h3 { min-width:0; margin:0; color:var(--ink); font-size:16px; line-height:1.35; }
+.service-plan-title > span { flex:0 0 auto; color:#ee5d16; font-size:7px; font-weight:800; }
+.service-plan-summary { min-height:48px; margin-top:6px; color:var(--ink-3); font-size:12px; line-height:1.55; }
+.service-price { margin-top:8px; color:var(--brand-strong); font-size:clamp(18px,1.7vw,23px); font-weight:900; letter-spacing:-.04em; white-space:nowrap; }
+.service-price small { color:var(--ink-3); font-size:11px; font-weight:500; letter-spacing:0; }
+.service-plan-card ul { display:grid; gap:7px; margin:9px 0 12px; padding:9px 0 0; border-top:1px solid #f0edeb; list-style:none; }
+.service-plan-card li { display:flex; align-items:flex-start; gap:7px; min-width:0; color:var(--ink-2); font-size:12px; line-height:1.5; }
+.service-plan-card li .material-symbols-outlined { flex:0 0 auto; }
+.service-plan-card li .material-symbols-outlined { color:var(--ok); }
+.service-plan-actions { margin-top:auto; }
+.service-buy { width:100%; min-height:44px; margin-top:auto; border:1px solid var(--brand); border-radius:var(--radius-sm); background:var(--brand); color:#fff; font-size:12px; font-weight:800; cursor:pointer; transition:background-color .2s ease, color .2s ease, transform .2s ease, box-shadow .2s ease; }
+.service-buy:hover { background:var(--brand-strong); box-shadow:0 4px 12px rgba(153,71,0,.2); transform:translateY(-1px); }
+.service-buy:disabled { opacity:.55; cursor:wait; }
+.service-order { display:grid; gap:8px; margin:12px 0; padding:14px; border:1px solid #ffd0b4; border-radius:10px; background:#fff7f1; font-size:12px; }
+.service-order p { color:#776d68; }
+.service-order div { display:flex; gap:8px; }
+.service-order button { padding:7px 10px; border:0; border-radius:6px; background:#ff650e; color:white; cursor:pointer; font-size:11px; }
+.service-order button+button { background:#777; }
+.service-history { padding:2px 4px; }
+.service-history-head { display:flex; flex-wrap:wrap; align-items:end; justify-content:space-between; gap:10px; margin-bottom:12px; }
+.service-history-head h2 { font-size:25px; }
+.service-history-head p { margin-top:4px; color:#8b8582; font-size:13px; }
+.service-history-head > span { padding:6px 10px; border-radius:99px; background:#fff0e7; color:#e75a17; font-size:11px; font-weight:700; }
+.service-history-tabs { display:flex; align-items:center; gap:8px; width:100%; justify-content:flex-end; }
+.service-history-tabs button { border:0; padding:6px 9px; border-radius:6px; background:transparent; color:#77706d; font-size:11px; cursor:pointer; }
+.service-history-tabs button.active { background:#fff; color:#282321; font-weight:800; box-shadow:0 1px 4px #00000012; }
+.service-history-tabs button.service-export { color:#ef5d18; font-weight:700; }
+.service-table-wrap { overflow-x:auto; border:1px solid #eae5e2; border-radius:10px; background:white; }
+.service-table { min-width:850px; font-size:13px; }
+.service-table th { padding:12px 10px; background:#faf9f8; color:#746d69; font-size:15px; }
+.service-table td { padding:20px 12px; color:#88817e; text-align:center; }
+@media(max-width:560px) { .service-hero { min-height:225px; padding:22px 18px; } .service-hero h1 { font-size:23px; } .service-hero p { font-size:13px; } .service-hero p br { display:none; } .service-proof { max-width:300px; gap:7px 12px; } .service-proof span { font-size:11px; } .service-rocket { right:-20px; opacity:.7; } .service-spark { display:none; } .service-periods { width:100%; overflow-x:auto; justify-content:flex-start; } .service-periods button { flex:0 0 auto; padding:8px 10px; font-size:11px; } .service-plans { --service-card-width:min(82vw, 320px); gap:10px; } .service-plans-count-1, .service-plans-count-2, .service-plans-count-3 { justify-content:start; } .service-plan-card { min-height:370px; padding:16px 14px; } .service-plan-top { align-items:flex-start; } .service-history-tabs { justify-content:flex-start; } }

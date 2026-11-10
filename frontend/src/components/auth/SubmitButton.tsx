@@ -15,13 +15,21 @@ export default function SubmitButton({ busy, label, busyLabel }: Props) {
     >
       {busy ? (
         <>
-          <MaterialIcon name="progress_activity" size={20} className="animate-spin" />
+          <MaterialIcon
+            name="progress_activity"
+            size={20}
+            className="animate-spin"
+          />
           <span>{busyLabel}</span>
         </>
       ) : (
         <>
           <span className="tracking-wide">{label}</span>
-          <MaterialIcon name="arrow_forward" size={20} className="transition-transform group-hover:translate-x-1" />
+          <MaterialIcon
+            name="arrow_forward"
+            size={20}
+            className="transition-transform group-hover:translate-x-1"
+          />
         </>
       )}
     </button>

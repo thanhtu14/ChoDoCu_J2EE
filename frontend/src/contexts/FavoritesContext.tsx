@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import { yeuThichApi } from "../api/yeuThich";
 import { getErrorMessage } from "../utils/error";
 import { useAuth } from "./AuthContext";
@@ -70,7 +78,10 @@ export function FavoritesProvider({ children }: { children: ReactNode }) {
     [userId, toast],
   );
 
-  const value = useMemo(() => ({ has: (id: number) => ids.has(id), toggle }), [ids, toggle]);
+  const value = useMemo(
+    () => ({ has: (id: number) => ids.has(id), toggle }),
+    [ids, toggle],
+  );
   return <FavoritesContext.Provider value={value}>{children}</FavoritesContext.Provider>;
 }
 

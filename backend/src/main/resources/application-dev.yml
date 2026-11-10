@@ -1,14 +1,24 @@
 spring:
   datasource:
-    url: jdbc:sqlserver://localhost:1434;databaseName=chodocu;encrypt=true;trustServerCertificate=true
+    url: jdbc:sqlserver://localhost:1434;databaseName=chodocu;encrypt=true;trustServerCertificate=true;sendStringParametersAsUnicode=true
     username: sa
     password: "ChoDoCuJ2EE@"
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   jpa:
+    properties:
+      hibernate:
+        use_nationalized_character_data: true
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     open-in-view: false
     show-sql: true
+  servlet:
+    encoding:
+      charset: UTF-8
+      enabled: true
+      force: true
   flyway:
     enabled: false
   mail:

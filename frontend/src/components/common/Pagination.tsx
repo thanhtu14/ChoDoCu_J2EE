@@ -16,9 +16,20 @@ export default function Pagination({ page, totalPages, onChange }: Props) {
   for (let p = start; p <= end; p++) pages.push(p);
 
   return (
-    <nav className="pagination" aria-label="Phân trang">
-      <button type="button" disabled={page <= 1} onClick={() => onChange(page - 1)} aria-label="Trang trước">
-        <Icon name="left" size={18} />
+    <nav
+      className="pagination"
+      aria-label="Phân trang"
+    >
+      <button
+        type="button"
+        disabled={page <= 1}
+        onClick={() => onChange(page - 1)}
+        aria-label="Trang trước"
+      >
+        <Icon
+          name="left"
+          size={18}
+        />
       </button>
       {pages.map((p) => (
         <button
@@ -31,8 +42,16 @@ export default function Pagination({ page, totalPages, onChange }: Props) {
           {p}
         </button>
       ))}
-      <button type="button" disabled={page >= totalPages} onClick={() => onChange(page + 1)} aria-label="Trang sau">
-        <Icon name="right" size={18} />
+      <button
+        type="button"
+        disabled={page >= totalPages}
+        onClick={() => onChange(page + 1)}
+        aria-label="Trang sau"
+      >
+        <Icon
+          name="right"
+          size={18}
+        />
       </button>
     </nav>
   );

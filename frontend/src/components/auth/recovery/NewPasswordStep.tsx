@@ -29,7 +29,12 @@ export default function NewPasswordStep({ email, code, onDone }: Props) {
       await authApi.datLaiMatKhau({ email, maXacNhan: code, matKhauMoi: matKhau });
       onDone();
     } catch (err) {
-      setError(getErrorMessage(err, "Chưa đặt lại được mật khẩu. Mã có thể đã hết hạn, hãy yêu cầu mã mới."));
+      setError(
+        getErrorMessage(
+          err,
+          "Chưa đặt lại được mật khẩu. Mã có thể đã hết hạn, hãy yêu cầu mã mới.",
+        ),
+      );
     } finally {
       setBusy(false);
     }
@@ -37,8 +42,15 @@ export default function NewPasswordStep({ email, code, onDone }: Props) {
 
   return (
     <>
-      <RecoveryHeading icon="password" title="Đặt mật khẩu mới" subtitle="Chọn mật khẩu mà bạn chưa dùng ở nơi khác để tài khoản an toàn hơn." />
-      <form className="w-full text-left flex flex-col gap-space-lg" onSubmit={submit}>
+      <RecoveryHeading
+        icon="password"
+        title="Đặt mật khẩu mới"
+        subtitle="Chọn mật khẩu mà bạn chưa dùng ở nơi khác để tài khoản an toàn hơn."
+      />
+      <form
+        className="w-full text-left flex flex-col gap-space-lg"
+        onSubmit={submit}
+      >
         <AuthField
           id="new-password"
           label="Mật khẩu mới"
@@ -62,7 +74,11 @@ export default function NewPasswordStep({ email, code, onDone }: Props) {
           onChange={(e) => setXacNhan(e.target.value)}
         />
         {error && <FormAlert message={error} />}
-        <SubmitButton busy={busy} label="Đặt lại mật khẩu" busyLabel="Đang cập nhật…" />
+        <SubmitButton
+          busy={busy}
+          label="Đặt lại mật khẩu"
+          busyLabel="Đang cập nhật…"
+        />
       </form>
     </>
   );

@@ -36,7 +36,11 @@ export default function SearchBar() {
       className="flex items-center w-full h-12 bg-surface-container-low rounded-xl px-space-2xs transition-all focus-within:bg-surface-container-lowest focus-within:shadow-[0_0_0_2px_#ff7a00]"
     >
       <label className="relative flex items-center shrink-0 pl-space-md">
-        <MaterialIcon name="location_on" size={18} className="text-primary-container pointer-events-none" />
+        <MaterialIcon
+          name="location_on"
+          size={18}
+          className="text-primary-container pointer-events-none"
+        />
         <select
           aria-label="Khu vực"
           value={city}
@@ -45,12 +49,19 @@ export default function SearchBar() {
         >
           <option value="">Toàn quốc</option>
           {(cities.data ?? []).map((c) => (
-            <option key={c.id} value={c.id}>
+            <option
+              key={c.id}
+              value={c.id}
+            >
               {c.tenThanhPho}
             </option>
           ))}
         </select>
-        <MaterialIcon name="arrow_drop_down" size={16} className="absolute right-0 text-on-surface-variant pointer-events-none" />
+        <MaterialIcon
+          name="arrow_drop_down"
+          size={16}
+          className="absolute right-0 text-on-surface-variant pointer-events-none"
+        />
       </label>
       <div className="h-6 w-px bg-surface-variant mx-space-2xs shrink-0" />
       <input
@@ -65,7 +76,10 @@ export default function SearchBar() {
         type="submit"
         className="h-10 px-space-lg bg-primary-container text-on-primary font-button-text text-button-text rounded-lg border-0 cursor-pointer hover:bg-primary transition-colors flex items-center justify-center gap-space-2xs shadow-sm"
       >
-        <MaterialIcon name="search" size={20} />
+        <MaterialIcon
+          name="search"
+          size={20}
+        />
         <span className="hidden lg:inline">Tìm</span>
       </button>
     </form>

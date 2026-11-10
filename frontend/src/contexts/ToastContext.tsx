@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useMemo, useRef, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 
 type ToastKind = "ok" | "error" | "info";
 interface ToastItem {
@@ -27,9 +35,16 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div className="toasts" role="status" aria-live="polite">
+      <div
+        className="toasts"
+        role="status"
+        aria-live="polite"
+      >
         {items.map((t) => (
-          <div key={t.id} className={`toast toast-${t.kind}`}>
+          <div
+            key={t.id}
+            className={`toast toast-${t.kind}`}
+          >
             {t.text}
           </div>
         ))}

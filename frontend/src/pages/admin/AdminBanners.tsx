@@ -46,31 +46,77 @@ export default function AdminBanners() {
   return (
     <div className="stack">
       <h1>Banner</h1>
-      <form className="panel row" onSubmit={add}>
-        <div className="field" style={{ flex: 1 }}>
+      <form
+        className="panel row"
+        onSubmit={add}
+      >
+        <div
+          className="field"
+          style={{ flex: 1 }}
+        >
           <label htmlFor="u">Đường dẫn ảnh</label>
-          <input id="u" type="url" required value={url} onChange={(e) => setUrl(e.target.value)} placeholder="https://…/banner.jpg" />
+          <input
+            id="u"
+            type="url"
+            required
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            placeholder="https://…/banner.jpg"
+          />
         </div>
         <div className="field">
           <label htmlFor="v">Vị trí</label>
-          <input id="v" value={pos} onChange={(e) => setPos(e.target.value)} placeholder="TrangChu" />
+          <input
+            id="v"
+            value={pos}
+            onChange={(e) => setPos(e.target.value)}
+            placeholder="TrangChu"
+          />
         </div>
-        <button className="btn" disabled={busy}><Icon name="plus" size={16} /> Thêm</button>
+        <button
+          className="btn"
+          disabled={busy}
+        >
+          <Icon
+            name="plus"
+            size={16}
+          />{" "}
+          Thêm
+        </button>
       </form>
 
       {loading && !data ? (
         <Spinner />
       ) : error ? (
-        <ErrorBox message={error} onRetry={reload} />
+        <ErrorBox
+          message={error}
+          onRetry={reload}
+        />
       ) : !data || data.length === 0 ? (
         <Empty title="Chưa có banner" />
       ) : (
         <div className="img-list">
           {data.map((b) => (
-            <div key={b.id} className="img-row">
-              <img src={imgSrc(b.hinhAnh)} alt="" onError={onImgError} />
+            <div
+              key={b.id}
+              className="img-row"
+            >
+              <img
+                src={imgSrc(b.hinhAnh)}
+                alt=""
+                onError={onImgError}
+              />
               <span>{b.viTri ?? "—"}</span>
-              <button className="icon-btn" aria-label={`Xoá banner ${b.id}`} onClick={() => void remove(b.id)}><Icon name="trash" size={18} /></button>
+              <button
+                className="icon-btn"
+                aria-label={`Xoá banner ${b.id}`}
+                onClick={() => void remove(b.id)}
+              >
+                <Icon
+                  name="trash"
+                  size={18}
+                />
+              </button>
             </div>
           ))}
         </div>

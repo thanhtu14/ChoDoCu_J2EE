@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Claims c=Jwts.parser().verifyWith(Keys.hmacShaKeyFor(key)).requireIssuer(issuer).requireAudience(audience).build().parseSignedClaims(h.substring(7)).getPayload();
             List<SimpleGrantedAuthority> authorities=new ArrayList<>();
             Object rs=c.get("roles"); if(rs instanceof Collection<?> values) values.forEach(v->authorities.add(new SimpleGrantedAuthority("ROLE_"+v)));
-            Object ps=c.get("permissions"); if(ps instanceof Collection<?> values) values.forEach(v->authorities.add(new SimpleGrantedAuthority("PERMISSION_"+v)));
+            Object ps=c.get("permissions"); if(ps instanceof Collection<?> values) values.forEach(v->authorities.add(new SimpleGrantedAuthority(String.valueOf(v))));
             var auth=new UsernamePasswordAuthenticationToken(c.getSubject(),null,authorities);
             SecurityContextHolder.getContext().setAuthentication(auth);
         } catch (RuntimeException ignored) { SecurityContextHolder.clearContext(); }

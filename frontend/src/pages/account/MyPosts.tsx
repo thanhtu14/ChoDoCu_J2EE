@@ -35,20 +35,32 @@ export default function MyPosts() {
   const [busyIds, setBusyIds] = useState<Set<number>>(new Set());
 
   const posts = useMemo(() => data?.items ?? [], [data]);
-  const count = (s: TabKey) => (s === "all" ? posts.length : posts.filter((p) => p.trangThai === s).length);
+  const count = (s: TabKey) =>
+    s === "all" ? posts.length : posts.filter((p) => p.trangThai === s).length;
 
   const filtered = useMemo(() => {
     const kw = keyword.trim().toLowerCase();
     return posts
-      .filter((p) => (tab === "all" || p.trangThai === tab) && (!kw || p.tieuDe.toLowerCase().includes(kw)))
-      .sort((a, b) => (newestFirst ? 1 : -1) * (new Date(b.ngayDang).getTime() - new Date(a.ngayDang).getTime()));
+      .filter(
+        (p) =>
+          (tab === "all" || p.trangThai === tab) &&
+          (!kw || p.tieuDe.toLowerCase().includes(kw)),
+      )
+      .sort(
+        (a, b) =>
+          (newestFirst ? 1 : -1) *
+          (new Date(b.ngayDang).getTime() - new Date(a.ngayDang).getTime()),
+      );
   }, [posts, tab, keyword, newestFirst]);
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE));
   const current = Math.min(page, totalPages);
   const rows = filtered.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);
 
-  const mark = (ids: number[], on: boolean) => setBusyIds((cur) => new Set([...cur].filter((x) => !ids.includes(x)).concat(on ? ids : [])));
+  const mark = (ids: number[], on: boolean) =>
+    setBusyIds(
+      (cur) => new Set([...cur].filter((x) => !ids.includes(x)).concat(on ? ids : [])),
+    );
 
   const toggleHidden = async (id: number, hidden: boolean) => {
     mark([id], true);
@@ -64,14 +76,21 @@ export default function MyPosts() {
   };
 
   const hideSelected = async () => {
-    const ids = posts.filter((p) => selected.has(p.id) && p.trangThai === "DaDuyet").map((p) => p.id);
+    const ids = posts
+      .filter((p) => selected.has(p.id) && p.trangThai === "DaDuyet")
+      .map((p) => p.id);
     if (ids.length === 0) return toast("Chỉ ẩn được các tin đang hiển thị.", "info");
     mark(ids, true);
     const results = await Promise.allSettled(ids.map((id) => baiDangApi.an(id)));
     const failed = results.filter((r) => r.status === "rejected").length;
     mark(ids, false);
     setSelected(new Set());
-    toast(failed ? `Đã ẩn ${ids.length - failed}/${ids.length} tin, ${failed} tin lỗi.` : `Đã ẩn ${ids.length} tin.`, failed ? "error" : "ok");
+    toast(
+      failed
+        ? `Đã ẩn ${ids.length - failed}/${ids.length} tin, ${failed} tin lỗi.`
+        : `Đã ẩn ${ids.length} tin.`,
+      failed ? "error" : "ok",
+    );
     reload();
   };
 
@@ -85,44 +104,86 @@ export default function MyPosts() {
 
   const stats = [
     { label: "Tổng tin đăng", value: count("all"), icon: "list_alt", note: "Tất cả mục" },
-    { label: "Đang hiển thị", value: count("DaDuyet"), icon: "check_circle", note: "Đang tiếp cận khách", accent: "text-secondary" },
-    { label: "Đang chờ duyệt", value: count("ChoDuyet"), icon: "schedule", note: "Chờ kiểm duyệt", accent: "text-tertiary" },
-    { label: "Cần chỉnh sửa", value: count("TuChoi"), icon: "report", note: "Chưa được duyệt", accent: "text-error" },
+    {
+      label: "Đang hiển thị",
+      value: count("DaDuyet"),
+      icon: "check_circle",
+      note: "Đang tiếp cận khách",
+      accent: "text-secondary",
+    },
+    {
+      label: "Đang chờ duyệt",
+      value: count("ChoDuyet"),
+      icon: "schedule",
+      note: "Chờ kiểm duyệt",
+      accent: "text-tertiary",
+    },
+    {
+      label: "Cần chỉnh sửa",
+      value: count("TuChoi"),
+      icon: "report",
+      note: "Chưa được duyệt",
+      accent: "text-error",
+    },
   ];
 
   return (
     <div className="max-w-4xl mx-auto flex flex-col gap-space-lg pb-space-xl">
       <div className="flex items-center justify-between gap-space-md">
-        <h1 className="m-0 font-headline-1 text-headline-1 text-on-surface">Tin đăng của tôi</h1>
+        <h1 className="m-0 font-headline-1 text-headline-1 text-on-surface">
+          Tin đăng của tôi
+        </h1>
         <Link
           to="/dang-bai"
           className="inline-flex items-center gap-space-xs h-10 px-space-lg rounded-xl bg-primary-container hover:bg-primary text-on-primary no-underline hover:no-underline font-button-text text-button-text shadow-md transition-colors"
         >
-          <MaterialIcon name="add_circle" size={18} /> Đăng tin mới
+          <MaterialIcon
+            name="add_circle"
+            size={18}
+          />{" "}
+          Đăng tin mới
         </Link>
       </div>
 
       {loading ? (
         <Spinner />
       ) : error ? (
-        <ErrorBox message={error} onRetry={reload} />
+        <ErrorBox
+          message={error}
+          onRetry={reload}
+        />
       ) : (
         <>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-space-md">
             {stats.map((s) => (
-              <div key={s.label} className="bg-surface-container-lowest rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] p-space-md flex flex-col gap-space-2xs">
+              <div
+                key={s.label}
+                className="bg-surface-container-lowest rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] p-space-md flex flex-col gap-space-2xs"
+              >
                 <div className="flex items-center justify-between font-caption text-caption text-on-surface-variant">
                   <span>{s.label}</span>
-                  <MaterialIcon name={s.icon} size={18} className={s.accent} />
+                  <MaterialIcon
+                    name={s.icon}
+                    size={18}
+                    className={s.accent}
+                  />
                 </div>
-                <strong className="font-headline-1 text-headline-1 text-on-surface">{s.value}</strong>
-                <span className="font-caption text-caption text-on-surface-variant">{s.note}</span>
+                <strong className="font-headline-1 text-headline-1 text-on-surface">
+                  {s.value}
+                </strong>
+                <span className="font-caption text-caption text-on-surface-variant">
+                  {s.note}
+                </span>
               </div>
             ))}
           </div>
 
           <div className="bg-surface-container-lowest rounded-xl shadow-[0_2px_12px_rgba(0,0,0,0.05)] p-space-md flex flex-col gap-space-md">
-            <div role="tablist" aria-label="Lọc theo trạng thái" className="flex gap-space-lg overflow-x-auto border-b border-surface-variant">
+            <div
+              role="tablist"
+              aria-label="Lọc theo trạng thái"
+              className="flex gap-space-lg overflow-x-auto border-b border-surface-variant"
+            >
               {TABS.map((t) => {
                 const active = t.key === tab;
                 return (
@@ -136,11 +197,17 @@ export default function MyPosts() {
                       setPage(1);
                     }}
                     className={`shrink-0 -mb-px pb-space-sm px-0 bg-transparent border-0 border-b-2 cursor-pointer inline-flex items-center gap-space-xs font-button-text text-button-text ${
-                      active ? "border-primary-container text-primary" : "border-transparent text-on-surface-variant hover:text-on-surface"
+                      active
+                        ? "border-primary-container text-primary"
+                        : "border-transparent text-on-surface-variant hover:text-on-surface"
                     }`}
                   >
                     {t.label}
-                    <span className={`px-space-xs rounded-full font-caption-bold text-caption-bold ${active ? "bg-primary-fixed text-primary" : "bg-surface-container-high"}`}>{count(t.key)}</span>
+                    <span
+                      className={`px-space-xs rounded-full font-caption-bold text-caption-bold ${active ? "bg-primary-fixed text-primary" : "bg-surface-container-high"}`}
+                    >
+                      {count(t.key)}
+                    </span>
                   </button>
                 );
               })}
@@ -148,7 +215,11 @@ export default function MyPosts() {
 
             <div className="flex flex-wrap items-center gap-space-sm">
               <div className="relative flex-1 min-w-48 flex items-center">
-                <MaterialIcon name="search" size={18} className="absolute left-space-md text-on-surface-variant pointer-events-none" />
+                <MaterialIcon
+                  name="search"
+                  size={18}
+                  className="absolute left-space-md text-on-surface-variant pointer-events-none"
+                />
                 <input
                   type="search"
                   value={keyword}
@@ -166,7 +237,11 @@ export default function MyPosts() {
                 onClick={() => setNewestFirst((v) => !v)}
                 className="h-10 px-space-md rounded-xl border-0 cursor-pointer bg-surface-container-low hover:bg-surface-container font-button-text text-button-text text-on-surface inline-flex items-center gap-space-xs"
               >
-                <MaterialIcon name="swap_vert" size={18} /> {newestFirst ? "Mới nhất" : "Cũ nhất"}
+                <MaterialIcon
+                  name="swap_vert"
+                  size={18}
+                />{" "}
+                {newestFirst ? "Mới nhất" : "Cũ nhất"}
               </button>
               <button
                 type="button"
@@ -174,7 +249,11 @@ export default function MyPosts() {
                 onClick={() => void hideSelected()}
                 className="h-10 px-space-md rounded-xl border-0 cursor-pointer bg-surface-container-high hover:bg-surface-variant font-button-text text-button-text text-on-surface inline-flex items-center gap-space-xs disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <MaterialIcon name="visibility_off" size={18} /> Ẩn tin đã chọn{selected.size > 0 ? ` (${selected.size})` : ""}
+                <MaterialIcon
+                  name="visibility_off"
+                  size={18}
+                />{" "}
+                Ẩn tin đã chọn{selected.size > 0 ? ` (${selected.size})` : ""}
               </button>
             </div>
           </div>
@@ -185,7 +264,9 @@ export default function MyPosts() {
                 <Link to="/dang-bai">Đăng tin đầu tiên</Link> để bắt đầu bán đồ cũ.
               </Empty>
             ) : (
-              <Empty title="Không có tin nào khớp bộ lọc">Thử đổi trạng thái hoặc từ khóa tìm kiếm.</Empty>
+              <Empty title="Không có tin nào khớp bộ lọc">
+                Thử đổi trạng thái hoặc từ khóa tìm kiếm.
+              </Empty>
             )
           ) : (
             <div className="flex flex-col gap-space-md">
@@ -205,9 +286,15 @@ export default function MyPosts() {
           {filtered.length > 0 && (
             <div className="flex flex-wrap items-center justify-between gap-space-md font-caption text-caption text-on-surface-variant">
               <span>
-                Hiển thị {(current - 1) * PAGE_SIZE + 1} - {(current - 1) * PAGE_SIZE + rows.length} trong tổng số {filtered.length} tin đăng
+                Hiển thị {(current - 1) * PAGE_SIZE + 1} -{" "}
+                {(current - 1) * PAGE_SIZE + rows.length} trong tổng số {filtered.length}{" "}
+                tin đăng
               </span>
-              <Pagination page={current} totalPages={totalPages} onChange={setPage} />
+              <Pagination
+                page={current}
+                totalPages={totalPages}
+                onChange={setPage}
+              />
             </div>
           )}
         </>

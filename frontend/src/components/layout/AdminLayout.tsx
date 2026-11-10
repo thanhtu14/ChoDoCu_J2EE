@@ -22,12 +22,24 @@ export default function AdminLayout() {
   const { isAdmin } = useAuth();
   return (
     <div className="admin">
-      <nav className="admin-nav" aria-label="Quản trị">
+      <nav
+        className="admin-nav"
+        aria-label="Quản trị"
+      >
         {items
           .filter((i) => !i.adminOnly || isAdmin)
           .map((i) => (
-            <NavLink key={i.to} to={i.to} end={i.end} className={({ isActive }) => (isActive ? "is-active" : "")}>
-              <Icon name={i.icon} size={18} /> {i.label}
+            <NavLink
+              key={i.to}
+              to={i.to}
+              end={i.end}
+              className={({ isActive }) => (isActive ? "is-active" : "")}
+            >
+              <Icon
+                name={i.icon}
+                size={18}
+              />{" "}
+              {i.label}
             </NavLink>
           ))}
       </nav>

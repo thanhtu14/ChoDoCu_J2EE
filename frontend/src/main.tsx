@@ -13,17 +13,17 @@ import "./styles/tailwind.css";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ErrorBoundary>
-    <BrowserRouter>
-      <ToastProvider>
-        <AuthProvider>
-          <FavoritesProvider>
-            <NotificationProvider>
-              <App />
-            </NotificationProvider>
-          </FavoritesProvider>
-        </AuthProvider>
-      </ToastProvider>
-    </BrowserRouter>
+      <BrowserRouter>
+        <ToastProvider>
+          <AuthProvider>
+            <FavoritesProvider>
+              <NotificationProvider>
+                <App />
+              </NotificationProvider>
+            </FavoritesProvider>
+          </AuthProvider>
+        </ToastProvider>
+      </BrowserRouter>
     </ErrorBoundary>
   </StrictMode>,
 );

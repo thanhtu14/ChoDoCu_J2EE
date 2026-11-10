@@ -28,9 +28,19 @@ export default function PostSearch() {
   useEffect(() => setKw(tuKhoa), [tuKhoa]);
 
   const tree = useFetch(() => danhMucApi.cay(), []);
-  const history = useFetch(() => (user ? timKiemApi.lichSu(8) : Promise.resolve([])), [user?.idNguoiDung]);
+  const history = useFetch(
+    () => (user ? timKiemApi.lichSu(8) : Promise.resolve([])),
+    [user?.idNguoiDung],
+  );
   const result = useFetch(
-    () => baiDangApi.tim({ tuKhoa: tuKhoa || undefined, idDanhMuc, idThanhPho, page, pageSize: PAGE_SIZE }),
+    () =>
+      baiDangApi.tim({
+        tuKhoa: tuKhoa || undefined,
+        idDanhMuc,
+        idThanhPho,
+        page,
+        pageSize: PAGE_SIZE,
+      }),
     [tuKhoa, idDanhMuc, idThanhPho, page],
   );
 
@@ -59,10 +69,22 @@ export default function PostSearch() {
       </div>
 
       <div className="search-layout">
-        <aside className="filters panel stack" aria-label="Bộ lọc">
-          <form className="field" onSubmit={submit}>
+        <aside
+          className="filters panel stack"
+          aria-label="Bộ lọc"
+        >
+          <form
+            className="field"
+            onSubmit={submit}
+          >
             <label htmlFor="kw">Từ khoá</label>
-            <input id="kw" type="search" value={kw} onChange={(e) => setKw(e.target.value)} placeholder="Ví dụ: iPhone 12" />
+            <input
+              id="kw"
+              type="search"
+              value={kw}
+              onChange={(e) => setKw(e.target.value)}
+              placeholder="Ví dụ: iPhone 12"
+            />
             <button className="btn btn-sm">Tìm</button>
           </form>
 
@@ -71,7 +93,12 @@ export default function PostSearch() {
               <span className="label">Bạn đã tìm gần đây</span>
               <div className="history">
                 {uniqueHistory.map((h) => (
-                  <button key={h} type="button" className="chip" onClick={() => update({ q: h })}>
+                  <button
+                    key={h}
+                    type="button"
+                    className="chip"
+                    onClick={() => update({ q: h })}
+                  >
                     {h}
                   </button>
                 ))}
@@ -81,7 +108,12 @@ export default function PostSearch() {
 
           <div className="field">
             <label htmlFor="dm">Danh mục</label>
-            <CategorySelect id="dm" tree={tree.data ?? []} value={idDanhMuc} onChange={(id) => update({ danhMuc: id ? String(id) : undefined })} />
+            <CategorySelect
+              id="dm"
+              tree={tree.data ?? []}
+              value={idDanhMuc}
+              onChange={(id) => update({ danhMuc: id ? String(id) : undefined })}
+            />
           </div>
 
           <div className="field">
@@ -90,12 +122,18 @@ export default function PostSearch() {
               idThanhPho={idThanhPho}
               idPhuongXa={undefined}
               showWard={false}
-              onChange={(v) => update({ thanhPho: v.idThanhPho ? String(v.idThanhPho) : undefined })}
+              onChange={(v) =>
+                update({ thanhPho: v.idThanhPho ? String(v.idThanhPho) : undefined })
+              }
             />
           </div>
 
           {hasFilter && (
-            <button type="button" className="btn btn-ghost btn-sm" onClick={() => setParams(new URLSearchParams())}>
+            <button
+              type="button"
+              className="btn btn-ghost btn-sm"
+              onClick={() => setParams(new URLSearchParams())}
+            >
               Xoá bộ lọc
             </button>
           )}
@@ -105,14 +143,27 @@ export default function PostSearch() {
           {result.loading ? (
             <Spinner />
           ) : result.error ? (
-            <ErrorBox message={result.error} onRetry={result.reload} />
+            <ErrorBox
+              message={result.error}
+              onRetry={result.reload}
+            />
           ) : items.length === 0 ? (
-            <Empty title="Không có tin nào phù hợp">Thử bỏ bớt bộ lọc hoặc dùng từ khoá ngắn hơn.</Empty>
+            <Empty title="Không có tin nào phù hợp">
+              Thử bỏ bớt bộ lọc hoặc dùng từ khoá ngắn hơn.
+            </Empty>
           ) : (
             <>
               <div className="grid-posts">
                 {items.map((p) => (
-                  <PostCard key={p.id} id={p.id} tieuDe={p.tieuDe} giaTien={p.giaTien} anh={p.anhs[0]} noiTrongTin={p.tenThanhPho} ngay={p.ngayDang} />
+                  <PostCard
+                    key={p.id}
+                    id={p.id}
+                    tieuDe={p.tieuDe}
+                    giaTien={p.giaTien}
+                    anh={p.anhs[0]}
+                    noiTrongTin={p.tenThanhPho}
+                    ngay={p.ngayDang}
+                  />
                 ))}
               </div>
               <Pagination

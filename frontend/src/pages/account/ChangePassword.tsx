@@ -20,11 +20,18 @@ export default function ChangePassword() {
   return (
     <div className="max-w-2xl mx-auto flex flex-col gap-space-lg pb-space-xl">
       <Card className="p-space-xl">
-        <h1 className="m-0 font-headline-1 text-headline-1 text-on-surface">Đổi mật khẩu tài khoản</h1>
+        <h1 className="m-0 font-headline-1 text-headline-1 text-on-surface">
+          Đổi mật khẩu tài khoản
+        </h1>
         <p className="m-0 mt-space-2xs font-body-2 text-body-2 text-on-surface-variant">
-          Để bảo vệ tài khoản Chợ Đồ Cũ của bạn, vui lòng không chia sẻ mật khẩu cho bất kỳ ai.
+          Để bảo vệ tài khoản Chợ Đồ Cũ của bạn, vui lòng không chia sẻ mật khẩu cho bất
+          kỳ ai.
         </p>
-        <div role="tablist" aria-label="Cách đổi mật khẩu" className="mt-space-lg grid grid-cols-1 sm:grid-cols-2 gap-space-sm">
+        <div
+          role="tablist"
+          aria-label="Cách đổi mật khẩu"
+          className="mt-space-lg grid grid-cols-1 sm:grid-cols-2 gap-space-sm"
+        >
           {TABS.map((t) => {
             const active = method === t.key;
             return (
@@ -35,10 +42,15 @@ export default function ChangePassword() {
                 aria-selected={active}
                 onClick={() => setMethod(t.key)}
                 className={`h-12 rounded-xl border-0 cursor-pointer inline-flex items-center justify-center gap-space-xs font-button-text text-button-text transition-colors ${
-                  active ? "bg-primary-container text-on-primary" : "bg-surface-container-low text-on-surface hover:bg-surface-container-high"
+                  active
+                    ? "bg-primary-container text-on-primary"
+                    : "bg-surface-container-low text-on-surface hover:bg-surface-container-high"
                 }`}
               >
-                <MaterialIcon name={t.icon} size={18} />
+                <MaterialIcon
+                  name={t.icon}
+                  size={18}
+                />
                 {t.label}
               </button>
             );
@@ -46,7 +58,11 @@ export default function ChangePassword() {
         </div>
       </Card>
 
-      {method === "old" ? <PasswordByOldForm /> : <PasswordByEmail />}
+      {method === "old" ? (
+        <PasswordByOldForm />
+      ) : (
+        <PasswordByEmail />
+      )}
     </div>
   );
 }

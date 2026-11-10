@@ -22,7 +22,9 @@ import java.util.List;
 public class DichVuController {
     private final DichVuRepository repository;
 
-    public DichVuController(DichVuRepository repository) { this.repository = repository; }
+    public DichVuController(DichVuRepository repository) {
+        this.repository = repository;
+    }
 
     @GetMapping
     @Transactional(readOnly = true)
@@ -49,7 +51,8 @@ public class DichVuController {
     @PutMapping("/{id}")
     @PreAuthorize("hasAuthority('" + AppPermissions.DICH_VU_QUAN_LY + "')")
     public DichVuResponse capNhat(@PathVariable Integer id, @Valid @RequestBody DichVuRequest request) {
-        DichVu service = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy gói dịch vụ."));
+        DichVu service = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy gói dịch vụ."));
         apply(service, request);
         return toDto(repository.save(service));
     }
@@ -58,7 +61,8 @@ public class DichVuController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("hasAuthority('" + AppPermissions.DICH_VU_QUAN_LY + "')")
     public void ngungBan(@PathVariable Integer id) {
-        DichVu service = repository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy gói dịch vụ."));
+        DichVu service = repository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Không tìm thấy gói dịch vụ."));
         service.setTrangThai("NgungHoatDong");
         repository.save(service);
     }
@@ -72,12 +76,16 @@ public class DichVuController {
     }
 
     private DichVuResponse toDto(DichVu service) {
-        return new DichVuResponse(service.getId(), service.getTenDichVu(), service.getGia(), service.getThoiGianDichVu(),
+        return new DichVuResponse(service.getId(), service.getTenDichVu(), service.getGia(),
+                service.getThoiGianDichVu(),
                 service.getLuotDay(), service.getLuotDang(), service.getNgayTao(), service.getTrangThai());
     }
 
     public record DichVuRequest(@NotBlank @Size(max = 150) String tenDichVu, @DecimalMin("0.0") BigDecimal gia,
-                                @Min(0) int thoiGianDichVu, @Min(0) int luotDay, @Min(0) int luotDang) { }
+            @Min(0) int thoiGianDichVu, @Min(0) int luotDay, @Min(0) int luotDang) {
+    }
+
     public record DichVuResponse(Integer id, String tenDichVu, BigDecimal gia, int thoiGianDichVu,
-                                 int luotDay, int luotDang, java.time.LocalDateTime ngayTao, String trangThai) { }
+            int luotDay, int luotDang, java.time.LocalDateTime ngayTao, String trangThai) {
+    }
 }

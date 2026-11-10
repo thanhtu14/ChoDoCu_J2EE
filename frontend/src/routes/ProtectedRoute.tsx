@@ -6,7 +6,20 @@ export default function ProtectedRoute({ roles }: { roles?: string[] }) {
   const { user } = useAuth();
   const location = useLocation();
 
-  if (!user) return <Navigate to="/dang-nhap" replace state={{ from: location.pathname + location.search }} />;
-  if (roles && !roles.includes(user.role)) return <Navigate to="/" replace />;
+  if (!user)
+    return (
+      <Navigate
+        to="/dang-nhap"
+        replace
+        state={{ from: location.pathname + location.search }}
+      />
+    );
+  if (roles && !roles.includes(user.role))
+    return (
+      <Navigate
+        to="/"
+        replace
+      />
+    );
   return <Outlet />;
 }

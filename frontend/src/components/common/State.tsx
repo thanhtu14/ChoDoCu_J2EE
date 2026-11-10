@@ -2,19 +2,38 @@ import type { ReactNode } from "react";
 
 export function Spinner({ label = "Đang tải…" }: { label?: string }) {
   return (
-    <div className="state" role="status">
-      <span className="spinner" aria-hidden="true" />
+    <div
+      className="state"
+      role="status"
+    >
+      <span
+        className="spinner"
+        aria-hidden="true"
+      />
       <span>{label}</span>
     </div>
   );
 }
 
-export function ErrorBox({ message, onRetry }: { message: string; onRetry?: () => void }) {
+export function ErrorBox({
+  message,
+  onRetry,
+}: {
+  message: string;
+  onRetry?: () => void;
+}) {
   return (
-    <div className="state state-error" role="alert">
+    <div
+      className="state state-error"
+      role="alert"
+    >
       <p>{message}</p>
       {onRetry && (
-        <button type="button" className="btn btn-ghost" onClick={onRetry}>
+        <button
+          type="button"
+          className="btn btn-ghost"
+          onClick={onRetry}
+        >
           Thử lại
         </button>
       )}

@@ -7,13 +7,25 @@ interface Props {
   idThanhPho: string;
   idPhuongXa: string;
   diaChiChiTiet: string;
-  onChange: (patch: { idThanhPho?: string; idPhuongXa?: string; diaChiChiTiet?: string }) => void;
+  onChange: (patch: {
+    idThanhPho?: string;
+    idPhuongXa?: string;
+    diaChiChiTiet?: string;
+  }) => void;
 }
 
 /** Địa chỉ: chọn tỉnh/thành, chọn xã/phường thuộc tỉnh đó, rồi nhập số nhà, đường. */
-export default function AddressFields({ idThanhPho, idPhuongXa, diaChiChiTiet, onChange }: Props) {
+export default function AddressFields({
+  idThanhPho,
+  idPhuongXa,
+  diaChiChiTiet,
+  onChange,
+}: Props) {
   const cities = useFetch(() => diaChiApi.thanhPho(), []);
-  const wards = useFetch(() => (idThanhPho ? diaChiApi.phuongXa(Number(idThanhPho)) : Promise.resolve([])), [idThanhPho]);
+  const wards = useFetch(
+    () => (idThanhPho ? diaChiApi.phuongXa(Number(idThanhPho)) : Promise.resolve([])),
+    [idThanhPho],
+  );
   const wardList = wards.data ?? [];
 
   return (
@@ -27,7 +39,10 @@ export default function AddressFields({ idThanhPho, idPhuongXa, diaChiChiTiet, o
         >
           <option value="">Chọn tỉnh / thành phố</option>
           {(cities.data ?? []).map((c) => (
-            <option key={c.id} value={c.id}>
+            <option
+              key={c.id}
+              value={c.id}
+            >
               {c.tenThanhPho}
             </option>
           ))}
@@ -39,9 +54,18 @@ export default function AddressFields({ idThanhPho, idPhuongXa, diaChiChiTiet, o
           disabled={!idThanhPho || wards.loading || wardList.length === 0}
           onChange={(e) => onChange({ idPhuongXa: e.target.value })}
         >
-          <option value="">{!idThanhPho ? "Chọn tỉnh / thành phố trước" : wards.loading ? "Đang tải…" : "Chọn xã / phường"}</option>
+          <option value="">
+            {!idThanhPho
+              ? "Chọn tỉnh / thành phố trước"
+              : wards.loading
+                ? "Đang tải…"
+                : "Chọn xã / phường"}
+          </option>
           {wardList.map((w) => (
-            <option key={w.id} value={w.id}>
+            <option
+              key={w.id}
+              value={w.id}
+            >
               {w.tenPhuongXa}
             </option>
           ))}
@@ -55,7 +79,12 @@ export default function AddressFields({ idThanhPho, idPhuongXa, diaChiChiTiet, o
         value={diaChiChiTiet}
         onChange={(e) => onChange({ diaChiChiTiet: e.target.value })}
         autoComplete="address-line1"
-        trailing={<MaterialIcon name="location_on" size={18} />}
+        trailing={
+          <MaterialIcon
+            name="location_on"
+            size={18}
+          />
+        }
       />
     </div>
   );

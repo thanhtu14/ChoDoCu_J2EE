@@ -15,16 +15,35 @@ interface Props {
 }
 
 /** Thẻ tin đăng. Giá nằm trên "tem giá" có lỗ xỏ dây – chi tiết nhận diện của chợ. */
-export default function PostCard({ id, tieuDe, giaTien, anh, noiTrongTin, ngay, trangThai }: Props) {
+export default function PostCard({
+  id,
+  tieuDe,
+  giaTien,
+  anh,
+  noiTrongTin,
+  ngay,
+  trangThai,
+}: Props) {
   const fav = useFavorites();
   const saved = fav.has(id);
 
   return (
     <article className="post-card">
-      <Link to={`/bai-dang/${id}`} className="post-card-media" aria-label={tieuDe}>
-        <img src={imgSrc(anh)} alt="" loading="lazy" onError={onImgError} />
+      <Link
+        to={`/bai-dang/${id}`}
+        className="post-card-media"
+        aria-label={tieuDe}
+      >
+        <img
+          src={imgSrc(anh)}
+          alt=""
+          loading="lazy"
+          onError={onImgError}
+        />
         {trangThai && trangThai !== "DaDuyet" && (
-          <span className="badge badge-status">{TRANG_THAI_BAI_DANG[trangThai] ?? trangThai}</span>
+          <span className="badge badge-status">
+            {TRANG_THAI_BAI_DANG[trangThai] ?? trangThai}
+          </span>
         )}
       </Link>
       <button
@@ -34,7 +53,11 @@ export default function PostCard({ id, tieuDe, giaTien, anh, noiTrongTin, ngay, 
         aria-label={saved ? "Bỏ khỏi yêu thích" : "Lưu vào yêu thích"}
         onClick={() => void fav.toggle(id)}
       >
-        <Icon name="heart" size={18} filled={saved} />
+        <Icon
+          name="heart"
+          size={18}
+          filled={saved}
+        />
       </button>
       <div className="post-card-body">
         <span className="price-tag">{formatPrice(giaTien)}</span>
@@ -44,7 +67,11 @@ export default function PostCard({ id, tieuDe, giaTien, anh, noiTrongTin, ngay, 
         <p className="post-card-meta">
           {noiTrongTin && (
             <span>
-              <Icon name="pin" size={14} /> {noiTrongTin}
+              <Icon
+                name="pin"
+                size={14}
+              />{" "}
+              {noiTrongTin}
             </span>
           )}
           {ngay && <span>{timeAgo(ngay)}</span>}

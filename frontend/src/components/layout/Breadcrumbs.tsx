@@ -34,14 +34,26 @@ export default function Breadcrumbs() {
   const parts = pathname.split("/").filter(Boolean);
   if (parts.length === 0) return null;
 
-  const crumbs: Segment[] = parts.map((p) => (/^\d+$/.test(p) ? { label: `#${p}` } : (SEGMENTS[p] ?? { label: p })));
+  const crumbs: Segment[] = parts.map((p) =>
+    /^\d+$/.test(p) ? { label: `#${p}` } : (SEGMENTS[p] ?? { label: p }),
+  );
 
   return (
-    <nav aria-label="Đường dẫn" className="w-full bg-surface-container-low py-space-xs">
+    <nav
+      aria-label="Đường dẫn"
+      className="w-full bg-surface-container-low py-space-xs"
+    >
       <ol className="max-w-7xl mx-auto px-margin-desktop m-0 list-none flex items-center gap-space-2xs overflow-x-auto whitespace-nowrap text-on-surface-variant font-caption text-caption">
         <li className="flex items-center gap-space-2xs">
-          <Link to="/" className="flex items-center gap-space-2xs text-on-surface-variant hover:text-primary no-underline hover:no-underline transition-colors">
-            <MaterialIcon name="home" size={16} className="text-primary" />
+          <Link
+            to="/"
+            className="flex items-center gap-space-2xs text-on-surface-variant hover:text-primary no-underline hover:no-underline transition-colors"
+          >
+            <MaterialIcon
+              name="home"
+              size={16}
+              className="text-primary"
+            />
             <span>Chợ Đồ Cũ</span>
           </Link>
         </li>
@@ -52,11 +64,19 @@ export default function Breadcrumbs() {
               <li aria-hidden="true">/</li>
               <li>
                 {last || !c.to ? (
-                  <span className={last ? "text-on-surface font-caption-bold text-caption-bold" : ""} aria-current={last ? "page" : undefined}>
+                  <span
+                    className={
+                      last ? "text-on-surface font-caption-bold text-caption-bold" : ""
+                    }
+                    aria-current={last ? "page" : undefined}
+                  >
                     {c.label}
                   </span>
                 ) : (
-                  <Link to={c.to} className="text-on-surface-variant hover:text-primary no-underline hover:no-underline transition-colors">
+                  <Link
+                    to={c.to}
+                    className="text-on-surface-variant hover:text-primary no-underline hover:no-underline transition-colors"
+                  >
                     {c.label}
                   </Link>
                 )}

@@ -56,7 +56,7 @@ public class BaiDang extends BaseEntity {
     @Column(name = "TrangThai", nullable = false, length = 20)
     private TrangThaiBaiDang trangThai = TrangThaiBaiDang.CHO_DUYET;
 
-    @Column(name = "UuTien", nullable = false)
+    @Column(name = "UuTien", nullable = true)
     private LocalDateTime uuTien;
 
     @OneToMany(mappedBy = "idBaiDang")

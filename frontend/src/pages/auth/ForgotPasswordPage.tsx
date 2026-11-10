@@ -18,7 +18,13 @@ export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
 
-  if (user) return <Navigate to="/" replace />;
+  if (user)
+    return (
+      <Navigate
+        to="/"
+        replace
+      />
+    );
 
   return (
     <RecoveryLayout step={step}>
@@ -41,7 +47,13 @@ export default function ForgotPasswordPage() {
           onChangeEmail={() => setStep(1)}
         />
       )}
-      {step === 3 && <NewPasswordStep email={email} code={code} onDone={() => setStep(4)} />}
+      {step === 3 && (
+        <NewPasswordStep
+          email={email}
+          code={code}
+          onDone={() => setStep(4)}
+        />
+      )}
       {step === 4 && <DoneStep />}
     </RecoveryLayout>
   );

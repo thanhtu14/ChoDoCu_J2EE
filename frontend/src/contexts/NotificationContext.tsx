@@ -1,4 +1,12 @@
-import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from "react";
 import { thongBaoApi } from "../api/thongBao";
 import { useAuth } from "./AuthContext";
 
@@ -32,7 +40,9 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   }, [userId, refresh]);
 
   const value = useMemo(() => ({ unread, refresh }), [unread, refresh]);
-  return <NotificationContext.Provider value={value}>{children}</NotificationContext.Provider>;
+  return (
+    <NotificationContext.Provider value={value}>{children}</NotificationContext.Provider>
+  );
 }
 
 // eslint-disable-next-line react-refresh/only-export-components

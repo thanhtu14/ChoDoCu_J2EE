@@ -10,7 +10,8 @@ interface Props {
 /** Ô nhập mã OTP: mỗi chữ số một ô, tự nhảy ô, hỗ trợ dán cả mã và phím Backspace. */
 export default function OtpInput({ value, onChange, length = 6, disabled }: Props) {
   const refs = useRef<(HTMLInputElement | null)[]>([]);
-  const focus = (i: number) => refs.current[Math.max(0, Math.min(i, length - 1))]?.focus();
+  const focus = (i: number) =>
+    refs.current[Math.max(0, Math.min(i, length - 1))]?.focus();
 
   const handleChange = (i: number, raw: string) => {
     const digit = raw.replace(/\D/g, "").slice(-1);
@@ -41,7 +42,11 @@ export default function OtpInput({ value, onChange, length = 6, disabled }: Prop
   };
 
   return (
-    <div className="flex justify-center gap-space-sm" role="group" aria-label={`Mã xác thực ${length} chữ số`}>
+    <div
+      className="flex justify-center gap-space-sm"
+      role="group"
+      aria-label={`Mã xác thực ${length} chữ số`}
+    >
       {Array.from({ length }, (_, i) => (
         <input
           key={i}

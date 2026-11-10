@@ -31,7 +31,8 @@ export default function UserMenu() {
       <Link
         to="/dang-nhap"
         aria-label="Đăng nhập"
-        className="w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0 text-on-primary hover:bg-on-primary-fixed-variant transition-colors"
+        title="Đăng nhập / Đăng ký"
+        className="header-auth-link w-10 h-10 rounded-full bg-primary flex items-center justify-center shrink-0 text-on-primary hover:bg-on-primary-fixed-variant transition-colors"
       >
         <MaterialIcon
           name="person"

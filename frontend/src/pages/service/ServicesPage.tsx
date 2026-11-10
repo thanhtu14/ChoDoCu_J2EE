@@ -47,7 +47,7 @@ export default function ServicesPage() {
     }
     setBusyId(id);
     try {
-      setOrder(await dichVuApi.mua(id, method));
+      navigate(`/thanh-toan/${id}`, { state: { phuongThucTT: method } });
     } catch (err) {
       toast(getErrorMessage(err), "error");
     } finally {

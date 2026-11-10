@@ -15,6 +15,7 @@ const SEGMENTS: Record<string, Segment> = {
   "tim-kiem": { label: "Tìm kiếm", to: "/tim-kiem" },
   "bai-dang": { label: "Tin đăng", to: "/tim-kiem" },
   "dich-vu": { label: "Dịch vụ đẩy tin", to: "/dich-vu" },
+  "thanh-toan": { label: "Thanh toán" },
   "dang-nhap": { label: "Đăng nhập", to: "/dang-nhap" },
   "dang-ky": { label: "Đăng ký", to: "/dang-ky" },
   "dang-bai": { label: "Đăng tin", to: "/dang-bai" },
@@ -34,7 +35,10 @@ export default function Breadcrumbs() {
   const parts = pathname.split("/").filter(Boolean);
   if (parts.length === 0) return null;
 
-  const crumbs: Segment[] = parts.map((p) =>
+  // Keep the package ID in the URL for data loading, but omit it from breadcrumbs.
+  const breadcrumbParts = parts[0] === "thanh-toan" ? ["dich-vu", "thanh-toan"] : parts;
+
+  const crumbs: Segment[] = breadcrumbParts.map((p) =>
     /^\d+$/.test(p) ? { label: `#${p}` } : (SEGMENTS[p] ?? { label: p }),
   );
 

@@ -24,6 +24,7 @@ import ServicesPage from "./pages/service/ServicesPage";
 import ProfilePage from "./pages/account/ProfilePage";
 import MyPosts from "./pages/account/MyPosts";
 import ChangePassword from "./pages/account/ChangePassword";
+import CheckoutPage from "./pages/payment/CheckoutPage";
 
 export default function App() {
   return (
@@ -63,6 +64,10 @@ export default function App() {
           <Route
             path="dich-vu"
             element={<ServicesPage />}
+          />
+          <Route
+            path="thanh-toan/:idDichVu"
+            element={<CheckoutPage />}
           />
 
           {/* Cần đăng nhập */}

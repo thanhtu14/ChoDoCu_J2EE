@@ -18,7 +18,7 @@ function NavItem({ to, icon, label, badge = 0, className = "" }: ItemProps) {
       title={label}
       aria-label={badge > 0 ? `${label}, ${badge} chưa đọc` : label}
       className={({ isActive }) =>
-        `relative items-center gap-space-2xs px-space-md py-space-sm rounded-lg no-underline hover:no-underline transition-colors font-button-text text-button-text ${
+        `header-nav-item relative items-center gap-space-2xs px-space-md py-space-sm rounded-lg no-underline hover:no-underline transition-colors font-button-text text-button-text ${
           isActive
             ? "bg-surface-container text-primary font-bold"
             : "text-on-surface-variant hover:bg-surface-container-low hover:text-on-surface"
@@ -29,7 +29,7 @@ function NavItem({ to, icon, label, badge = 0, className = "" }: ItemProps) {
         name={icon}
         size={20}
       />
-      <span className="hidden 2xl:inline">{label}</span>
+      <span className="header-nav-label hidden 2xl:inline">{label}</span>
       {badge > 0 && (
         <span className="absolute top-0 right-0 min-w-[18px] h-[18px] px-1 rounded-full bg-error text-on-error text-[11px] font-bold leading-[18px] text-center">
           {badge > 99 ? "99+" : badge}

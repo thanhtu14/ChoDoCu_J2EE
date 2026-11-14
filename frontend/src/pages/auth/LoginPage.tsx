@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from "react";
+import { useEffect, useState, type FormEvent } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import AuthDivider from "../../components/auth/AuthDivider";
 import AuthFormHeader from "../../components/auth/AuthFormHeader";
@@ -14,17 +14,25 @@ import { getErrorMessage } from "../../utils/error";
 /** Trang con của AuthLayout: khung hai cột do AuthLayout lo, ở đây chỉ có form. */
 export default function LoginPage() {
   useDocumentTitle("Đăng nhập");
-  const { user, login, loginWithGoogle } = useAuth();
+  const { user, isStaff, login, loginWithGoogle, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const from = (location.state as { from?: string } | null)?.from ?? "/";
 
   const [email, setEmail] = useState("");
   const [matKhau, setMatKhau] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState((location.state as { accessMessage?: string } | null)?.accessMessage ?? "");
   const [busy, setBusy] = useState(false);
 
-  if (user)
+  useEffect(() => {
+    if (user && isStaff) {
+      logout();
+      setError("Bạn không thể đăng nhập bằng tài khoản quản trị. Vui lòng dùng cổng quản trị.");
+    }
+  }, [user, isStaff, logout]);
+
+  if (user && isStaff) return null;
+  else if (user)
     return (
       <Navigate
         to={from}
@@ -37,10 +45,21 @@ export default function LoginPage() {
     setError("");
     setBusy(true);
     try {
+      if (user && isStaff) {
+        logout();
+        setError("Bạn không thể đăng nhập bằng tài khoản quản trị. Vui lòng dùng cổng quản trị.");
+        return;
+      }
       await login({ email: email.trim(), matKhau });
+      if (isStaff) {
+        logout();
+        setError("Bạn không thể đăng nhập bằng tài khoản quản trị. Vui lòng dùng cổng quản trị.");
+        return;
+      }
       navigate(from, { replace: true });
     } catch (err) {
-      setError(getErrorMessage(err, "Đăng nhập không thành công."));
+      const message = getErrorMessage(err, "Đăng nhập không thành công.");
+      setError(message.toLowerCase().includes("không có quyền") ? "Bạn không thể đăng nhập bằng tài khoản quản trị. Vui lòng dùng cổng quản trị." : message);
     } finally {
       setBusy(false);
     }
@@ -50,6 +69,11 @@ export default function LoginPage() {
     setError("");
     try {
       await loginWithGoogle(idToken);
+      if (isStaff) {
+        logout();
+        setError("Bạn không thể đăng nhập bằng tài khoản quản trị. Vui lòng dùng cổng quản trị.");
+        return;
+      }
       navigate(from, { replace: true });
     } catch (err) {
       setError(getErrorMessage(err, "Đăng nhập bằng Google không thành công."));

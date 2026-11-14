@@ -17,6 +17,7 @@ interface AuthContextValue {
   isStaff: boolean; // Admin hoặc Moderator
   isAdmin: boolean;
   login: (data: DangNhapRequest) => Promise<void>;
+  loginAdmin: (data: DangNhapRequest) => Promise<void>;
   register: (data: DangKyRequest) => Promise<void>;
   loginWithGoogle: (idToken: string) => Promise<void>;
   logout: () => void;
@@ -64,11 +65,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const login = useCallback(
-    async (data: DangNhapRequest) => save(await authApi.dangNhap(data)),
+    async (data: DangNhapRequest) => save(await authApi.dangNhapClient(data)),
+    [save],
+  );
+  const loginAdmin = useCallback(
+    async (data: DangNhapRequest) => save(await authApi.dangNhapQuanTri(data)),
     [save],
   );
   const loginWithGoogle = useCallback(
-    async (idToken: string) => save(await authApi.dangNhapGoogle(idToken)),
+    async (idToken: string) => {
+      const data = await authApi.dangNhapGoogle(idToken);
+      if (data.role !== "User") throw new Error("Bạn không thể đăng nhập bằng tài khoản quản trị. Vui lòng dùng cổng quản trị.");
+      save(data);
+    },
     [save],
   );
   const register = useCallback(
@@ -93,13 +102,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       isAdmin: role === "Admin",
       isStaff: role === "Admin" || role === "Moderator",
       login,
+      loginAdmin,
       register,
       loginWithGoogle,
       logout,
       updateUser,
       hasRole: (...roles: string[]) => roles.includes(role),
     };
-  }, [user, login, register, loginWithGoogle, logout, updateUser]);
+  }, [user, login, loginAdmin, register, loginWithGoogle, logout, updateUser]);
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

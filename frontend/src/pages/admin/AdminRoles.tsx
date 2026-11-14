@@ -3,9 +3,11 @@ import { phanQuyenApi } from "../../api/quanTri";
 import PermissionPicker from "../../components/admin/PermissionPicker";
 import { Card, TextInput } from "../../components/account/FormControls";
 import FormAlert from "../../components/auth/FormAlert";
-import { ErrorBox, Spinner } from "../../components/common/State";
+import { ErrorBox } from "../../components/common/State";
+import AdminPageSkeleton from "../../components/admin/AdminPageSkeleton";
 import { useToast } from "../../contexts/ToastContext";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import AdminRefreshButton from "../../components/admin/AdminRefreshButton";
 import { useFetch } from "../../hooks/useFetch";
 import type { VaiTroItem } from "../../types";
 import { getErrorMessage } from "../../utils/error";
@@ -29,6 +31,7 @@ export default function AdminRoles() {
   const [quyen, setQuyen] = useState<string[]>([]);
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
+  const [removing, setRemoving] = useState(false);
 
   const current: VaiTroItem | undefined =
     typeof selected === "number"
@@ -52,6 +55,7 @@ export default function AdminRoles() {
   }, [selected, current?.id, current?.quyen.join("|")]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const locked = current?.ten === "Admin"; // Admin luôn đủ quyền, không chỉnh để tránh tự cắt quyền
+  if (loading) return <AdminPageSkeleton variant="form" />;
 
   const save = async () => {
     setErr("");
@@ -78,6 +82,7 @@ export default function AdminRoles() {
 
   const remove = async () => {
     if (!current || !window.confirm(`Xóa vai trò "${current.ten}"?`)) return;
+    setRemoving(true);
     try {
       await phanQuyenApi.xoaVaiTro(current.id);
       toast("Đã xóa vai trò.", "ok");
@@ -85,30 +90,33 @@ export default function AdminRoles() {
       reload();
     } catch (e) {
       setErr(getErrorMessage(e, "Chưa xóa được vai trò."));
+    } finally {
+      setRemoving(false);
     }
   };
 
   return (
     <div className="flex flex-col gap-space-lg">
-      <div>
+      <div className="admin-simple-heading">
         <h1 className="m-0 font-headline-1 text-headline-1 text-on-surface">
           Phân quyền
         </h1>
+        <AdminRefreshButton />
         <p className="m-0 mt-space-2xs font-body-2 text-body-2 text-on-surface-variant">
           Tạo vai trò và chọn quyền cho từng vai trò. Để cấp vai trò hoặc quyền riêng cho
           một người, vào Người dùng → Phân quyền.
         </p>
       </div>
 
-      {loading && <Spinner />}
-      {error && (
+      {loading && <AdminPageSkeleton variant="form" />}
+      {!loading && error && (
         <ErrorBox
           message={error}
           onRetry={reload}
         />
       )}
 
-      {data && (
+      {!loading && data && (
         <div className="grid grid-cols-1 md:grid-cols-[240px_1fr] gap-space-lg items-start">
           <Card className="p-space-sm flex flex-col gap-space-2xs">
             {data.vaiTro.map((v) => (
@@ -164,9 +172,11 @@ export default function AdminRoles() {
                     <button
                       type="button"
                       onClick={remove}
+                      disabled={busy || removing}
                       className="h-11 px-space-lg rounded-xl border-0 cursor-pointer bg-error-container text-on-error-container font-button-text text-button-text"
                     >
-                      Xóa vai trò
+                      {removing && <span className="admin-action-spinner" aria-hidden="true" />}
+                      {removing ? "Đang xóa…" : "Xóa vai trò"}
                     </button>
                   )}
                 </div>
@@ -176,6 +186,7 @@ export default function AdminRoles() {
                   disabled={busy || locked}
                   className="h-11 px-space-lg rounded-xl border-0 cursor-pointer bg-primary-container hover:bg-primary text-on-primary font-button-text text-button-text disabled:opacity-70 disabled:cursor-not-allowed"
                 >
+                  {busy && <span className="admin-action-spinner" aria-hidden="true" />}
                   {busy
                     ? "Đang lưu…"
                     : selected === "new"

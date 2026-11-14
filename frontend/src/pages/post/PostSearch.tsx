@@ -64,7 +64,7 @@ export default function PostSearch() {
   return (
     <>
       <div className="page-head">
-        <h1>{tuKhoa ? `Kết quả cho “${tuKhoa}”` : "Tất cả tin đăng"}</h1>
+        <h1>{tuKhoa ? `Kết quả cho “${tuKhoa}”` : "Tất cả bài đăng"}</h1>
         {result.data && <span className="muted">{result.data.totalCount} tin</span>}
       </div>
 
@@ -77,7 +77,7 @@ export default function PostSearch() {
             className="field"
             onSubmit={submit}
           >
-            <label htmlFor="kw">Từ khoá</label>
+            <label htmlFor="kw">Sản phẩm cần tìm</label>
             <input
               id="kw"
               type="search"
@@ -107,7 +107,7 @@ export default function PostSearch() {
           )}
 
           <div className="field">
-            <label htmlFor="dm">Danh mục</label>
+            <label htmlFor="dm">Danh mục sản phẩm</label>
             <CategorySelect
               id="dm"
               tree={tree.data ?? []}

@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from "react";
 import { bannerApi } from "../../api/banner";
 import Icon from "../../components/common/Icon";
-import { Empty, ErrorBox, Spinner } from "../../components/common/State";
+import { Empty, ErrorBox } from "../../components/common/State";
+import AdminPageSkeleton from "../../components/admin/AdminPageSkeleton";
 import { useToast } from "../../contexts/ToastContext";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import AdminRefreshButton from "../../components/admin/AdminRefreshButton";
 import { useFetch } from "../../hooks/useFetch";
 import { getErrorMessage } from "../../utils/error";
 import { imgSrc, onImgError } from "../../utils/image";
@@ -15,6 +17,7 @@ export default function AdminBanners() {
   const [url, setUrl] = useState("");
   const [pos, setPos] = useState("");
   const [busy, setBusy] = useState(false);
+  const [removingId, setRemovingId] = useState<number | null>(null);
 
   const add = async (e: FormEvent) => {
     e.preventDefault();
@@ -34,18 +37,23 @@ export default function AdminBanners() {
 
   const remove = async (id: number) => {
     if (!window.confirm("Xoá banner này?")) return;
+    setRemovingId(id);
     try {
       await bannerApi.xoa(id);
       toast("Đã xoá banner.", "ok");
       reload();
     } catch (err) {
       toast(getErrorMessage(err), "error");
+    } finally {
+      setRemovingId(null);
     }
   };
 
+  if (loading) return <AdminPageSkeleton variant="table" />;
+
   return (
     <div className="stack">
-      <h1>Banner</h1>
+      <div className="admin-simple-heading"><h1>Banner</h1><AdminRefreshButton /></div>
       <form
         className="panel row"
         onSubmit={add}
@@ -77,16 +85,16 @@ export default function AdminBanners() {
           className="btn"
           disabled={busy}
         >
-          <Icon
+          {busy ? <span className="admin-action-spinner" aria-hidden="true" /> : <Icon
             name="plus"
             size={16}
-          />{" "}
-          Thêm
+          />}
+          {busy ? "Đang thêm…" : "Thêm"}
         </button>
       </form>
 
-      {loading && !data ? (
-        <Spinner />
+      {loading ? (
+        <AdminPageSkeleton variant="table" />
       ) : error ? (
         <ErrorBox
           message={error}
@@ -110,12 +118,13 @@ export default function AdminBanners() {
               <button
                 className="icon-btn"
                 aria-label={`Xoá banner ${b.id}`}
+                disabled={removingId === b.id}
                 onClick={() => void remove(b.id)}
               >
-                <Icon
+                {removingId === b.id ? <span className="admin-action-spinner" aria-hidden="true" /> : <Icon
                   name="trash"
                   size={18}
-                />
+                />}
               </button>
             </div>
           ))}

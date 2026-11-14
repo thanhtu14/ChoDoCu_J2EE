@@ -3,13 +3,14 @@ import { useAuth } from "../contexts/AuthContext";
 
 /** Chặn trang cần đăng nhập; truyền roles để chỉ cho đúng vai trò vào. */
 export default function ProtectedRoute({ roles }: { roles?: string[] }) {
-  const { user } = useAuth();
+  const { user, isStaff } = useAuth();
   const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/quan-tri");
 
   if (!user)
     return (
       <Navigate
-        to="/dang-nhap"
+        to={isAdminRoute ? "/dang-nhap-quan-tri" : "/dang-nhap"}
         replace
         state={{ from: location.pathname + location.search }}
       />
@@ -21,5 +22,6 @@ export default function ProtectedRoute({ roles }: { roles?: string[] }) {
         replace
       />
     );
+  if (!roles && isStaff) return <Navigate to="/quan-tri" replace />;
   return <Outlet />;
 }

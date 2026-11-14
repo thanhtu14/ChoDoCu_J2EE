@@ -5,9 +5,12 @@ import ContainerLayout from "./components/layout/ContainerLayout";
 import Layout from "./components/layout/Layout";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import AdminApprove from "./pages/admin/AdminApprove";
+import AdminPosts from "./pages/admin/AdminPosts";
 import AdminBanners from "./pages/admin/AdminBanners";
 import AdminCategories from "./pages/admin/AdminCategories";
 import AdminHome from "./pages/admin/AdminHome";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminRoles from "./pages/admin/AdminRoles";
 import AdminReports from "./pages/admin/AdminReports";
 import Favorites from "./pages/account/Favorites";
 import Notifications from "./pages/account/Notifications";
@@ -25,11 +28,15 @@ import ProfilePage from "./pages/account/ProfilePage";
 import MyPosts from "./pages/account/MyPosts";
 import ChangePassword from "./pages/account/ChangePassword";
 import CheckoutPage from "./pages/payment/CheckoutPage";
+import AdminLoginPage from "./pages/auth/AdminLoginPage";
+import AdminTransactions from "./pages/admin/AdminTransactions";
+import AdminServices from "./pages/admin/AdminServices";
 
 export default function App() {
   return (
     <Routes>
       <Route element={<Layout />}>
+        <Route path="dang-nhap-quan-tri" element={<AdminLoginPage />} />
         {/* Đăng nhập / đăng ký: khung hai cột riêng, rộng tối đa 7xl */}
         <Route element={<AuthLayout />}>
           <Route
@@ -116,9 +123,14 @@ export default function App() {
                 index
                 element={<AdminHome />}
               />
+              <Route path="nguoi-dung" element={<AdminUsers />} />
+              <Route path="ho-so" element={<ProfilePage />} />
+              <Route path="giao-dich-thanh-toan" element={<AdminTransactions />} />
+              <Route path="goi-dich-vu" element={<AdminServices />} />
+              <Route path="vai-tro" element={<AdminRoles />} />
               <Route
                 path="duyet-bai"
-                element={<AdminApprove />}
+                element={<AdminPosts />}
               />
               <Route element={<ProtectedRoute roles={["Admin"]} />}>
                 <Route

@@ -3,6 +3,8 @@ import type { AuthResponse, DangKyRequest, DangNhapRequest, DoiMatKhauRequest } 
 
 export const authApi = {
   dangNhap: (data: DangNhapRequest) => client.post<AuthResponse>("/auth/dang-nhap", data).then((r) => r.data),
+  dangNhapClient: (data: DangNhapRequest) => client.post<AuthResponse>("/auth/dang-nhap-client", data).then((r) => r.data),
+  dangNhapQuanTri: (data: DangNhapRequest) => client.post<AuthResponse>("/auth/dang-nhap-quan-tri", data).then((r) => r.data),
   dangKy: (data: DangKyRequest) => client.post<AuthResponse>("/auth/dang-ky", data).then((r) => r.data),
 
   /** Đăng nhập bằng Google: gửi idToken (JWT do Google ký) để BE xác minh rồi trả AuthResponse như đăng nhập thường. */

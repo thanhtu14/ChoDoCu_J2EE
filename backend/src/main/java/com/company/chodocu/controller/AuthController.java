@@ -14,6 +14,8 @@ public class AuthController {
     public AuthController(AuthService auth,AccountSecurityService accountSecurity){this.auth=auth;this.accountSecurity=accountSecurity;}
     @PostMapping("/dang-ky") public AuthResponse dangKy(@Valid @RequestBody DangKyRequest request){return auth.dangKy(request);}
     @PostMapping("/dang-nhap") public AuthResponse dangNhap(@Valid @RequestBody DangNhapRequest request){return auth.dangNhap(request);}
+    @PostMapping("/dang-nhap-client") public AuthResponse dangNhapClient(@Valid @RequestBody DangNhapRequest request){return auth.dangNhapClient(request);}
+    @PostMapping("/dang-nhap-quan-tri") public AuthResponse dangNhapQuanTri(@Valid @RequestBody DangNhapRequest request){return auth.dangNhapQuanTri(request);}
     @PostMapping("/dang-nhap-google") public AuthResponse dangNhapGoogle(@Valid @RequestBody DangNhapGoogleRequest request){return auth.dangNhapGoogle(request);}
     @PutMapping("/doi-mat-khau") @org.springframework.web.bind.annotation.ResponseStatus(HttpStatus.NO_CONTENT)
     public void doiMatKhau(@AuthenticationPrincipal String userId,@Valid @RequestBody DoiMatKhauRequest request){accountSecurity.doiMatKhau(id(userId),request);}

@@ -11,6 +11,7 @@ const paths = {
       <path d="m20 20-3.5-3.5" />
     </>
   ),
+  refresh: <><path d="M20 7v5h-5" /><path d="M4.8 9A8 8 0 0 1 18.5 6L20 7M4 17v-5h5" /><path d="M19.2 15A8 8 0 0 1 5.5 18L4 17" /></>,
   heart: (
     <path d="M12 20.5C5 16 2.5 12.5 2.5 9A4.8 4.8 0 0 1 7.3 4.2c1.9 0 3.5 1 4.7 2.8 1.2-1.8 2.8-2.8 4.7-2.8A4.8 4.8 0 0 1 21.5 9c0 3.5-2.5 7-9.5 11.5Z" />
   ),
@@ -21,6 +22,7 @@ const paths = {
     </>
   ),
   chat: <path d="M4 5h16v11H9l-5 4V5Z" />,
+  wallet: <><rect x="3" y="6" width="18" height="14" rx="2" /><path d="M3 9h18M16 14h2" /><path d="M6 6V4h12" /></>,
   plus: <path d="M12 5v14M5 12h14" />,
   user: (
     <>

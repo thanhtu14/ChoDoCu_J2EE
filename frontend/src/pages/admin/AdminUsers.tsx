@@ -3,10 +3,12 @@ import { quanTriNguoiDungApi } from "../../api/quanTri";
 import UserRolesDialog from "../../components/admin/UserRolesDialog";
 import { Card } from "../../components/account/FormControls";
 import Pagination from "../../components/common/Pagination";
-import { Empty, ErrorBox, Spinner } from "../../components/common/State";
+import { Empty, ErrorBox } from "../../components/common/State";
+import AdminPageSkeleton from "../../components/admin/AdminPageSkeleton";
 import { useAuth } from "../../contexts/AuthContext";
 import { useToast } from "../../contexts/ToastContext";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import AdminRefreshButton from "../../components/admin/AdminRefreshButton";
 import { useFetch } from "../../hooks/useFetch";
 import { getErrorMessage } from "../../utils/error";
 import { formatDate } from "../../utils/format";
@@ -59,12 +61,15 @@ export default function AdminUsers() {
     }
   };
 
+  if (loading) return <AdminPageSkeleton variant="table" />;
+
   return (
     <div className="flex flex-col gap-space-lg">
-      <div>
+      <div className="admin-simple-heading">
         <h1 className="m-0 font-headline-1 text-headline-1 text-on-surface">
           Quản lý người dùng
         </h1>
+        <AdminRefreshButton />
         <p className="m-0 mt-space-2xs font-body-2 text-body-2 text-on-surface-variant">
           Tìm kiếm, khóa/mở khóa và phân quyền tài khoản.
         </p>
@@ -122,16 +127,16 @@ export default function AdminUsers() {
         </form>
       </Card>
 
-      {loading && <Spinner />}
-      {error && (
+      {loading && <AdminPageSkeleton variant="table" />}
+      {!loading && error && (
         <ErrorBox
           message={error}
           onRetry={reload}
         />
       )}
-      {data && data.items.length === 0 && <Empty title="Không có người dùng phù hợp" />}
+      {!loading && data && data.items.length === 0 && <Empty title="Không có người dùng phù hợp" />}
 
-      {data && data.items.length > 0 && (
+      {!loading && data && data.items.length > 0 && (
         <Card className="overflow-x-auto">
           <table className="w-full border-collapse font-body-2 text-body-2 text-on-surface">
             <thead>
@@ -207,7 +212,8 @@ export default function AdminUsers() {
                             onClick={() => toggleLock(u.id, locked)}
                             className={`${smallBtn} ${locked ? "bg-primary-container text-on-primary hover:bg-primary" : "bg-error-container text-on-error-container hover:opacity-90"} disabled:opacity-60`}
                           >
-                            {locked ? "Mở khóa" : "Khóa"}
+                            {busyId === u.id && <span className="admin-action-spinner" aria-hidden="true" />}
+                            {busyId === u.id ? "Đang cập nhật…" : locked ? "Mở khóa" : "Khóa"}
                           </button>
                         )}
                       </div>
@@ -220,7 +226,7 @@ export default function AdminUsers() {
         </Card>
       )}
 
-      {data && (
+      {!loading && data && (
         <Pagination
           page={data.page}
           totalPages={data.totalPages}

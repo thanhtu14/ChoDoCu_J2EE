@@ -2,9 +2,11 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { baoCaoApi } from "../../api/baoCao";
 import Pagination from "../../components/common/Pagination";
-import { Empty, ErrorBox, Spinner } from "../../components/common/State";
+import { Empty, ErrorBox } from "../../components/common/State";
+import AdminPageSkeleton from "../../components/admin/AdminPageSkeleton";
 import { useToast } from "../../contexts/ToastContext";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import AdminRefreshButton from "../../components/admin/AdminRefreshButton";
 import { useFetch } from "../../hooks/useFetch";
 import { getErrorMessage } from "../../utils/error";
 import { formatDateTime } from "../../utils/format";
@@ -21,24 +23,30 @@ export default function AdminReports() {
   const toast = useToast();
   const [status, setStatus] = useState("");
   const [page, setPage] = useState(1);
+  const [busyId, setBusyId] = useState<number | null>(null);
   const { data, loading, error, reload } = useFetch(
     () => baoCaoApi.danhSach(status || undefined, page, 15),
     [status, page],
   );
 
   const handle = async (id: number, to: "DaXuLy" | "BoQua") => {
+    setBusyId(id);
     try {
       await baoCaoApi.xuLy(id, to);
       toast("Đã cập nhật báo cáo.", "ok");
       reload();
     } catch (err) {
       toast(getErrorMessage(err), "error");
+    } finally {
+      setBusyId(null);
     }
   };
 
+  if (loading) return <AdminPageSkeleton variant="table" />;
+
   return (
     <div className="stack">
-      <h1>Báo cáo vi phạm</h1>
+      <div className="admin-simple-heading"><h1>Báo cáo vi phạm</h1><AdminRefreshButton /></div>
       <div
         className="field"
         style={{ maxWidth: 220 }}
@@ -63,8 +71,8 @@ export default function AdminReports() {
         </select>
       </div>
 
-      {loading && !data ? (
-        <Spinner />
+      {loading ? (
+        <AdminPageSkeleton variant="table" />
       ) : error ? (
         <ErrorBox
           message={error}
@@ -101,15 +109,18 @@ export default function AdminReports() {
                     <td className="row">
                       <button
                         className="btn btn-ok btn-sm"
+                        disabled={busyId === r.id}
                         onClick={() => void handle(r.id, "DaXuLy")}
                       >
-                        Đã xử lý
+                        {busyId === r.id && <span className="admin-action-spinner" aria-hidden="true" />}
+                        {busyId === r.id ? "Đang lưu…" : "Đã xử lý"}
                       </button>
                       <button
                         className="btn btn-ghost btn-sm"
+                        disabled={busyId === r.id}
                         onClick={() => void handle(r.id, "BoQua")}
                       >
-                        Bỏ qua
+                        {busyId === r.id ? "Đang lưu…" : "Bỏ qua"}
                       </button>
                     </td>
                   </tr>

@@ -1,9 +1,11 @@
 import { useState, type FormEvent } from "react";
 import { danhMucApi } from "../../api/danhMuc";
 import Icon from "../../components/common/Icon";
-import { Empty, ErrorBox, Spinner } from "../../components/common/State";
+import { Empty, ErrorBox } from "../../components/common/State";
+import AdminPageSkeleton from "../../components/admin/AdminPageSkeleton";
 import { useToast } from "../../contexts/ToastContext";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
+import AdminRefreshButton from "../../components/admin/AdminRefreshButton";
 import { useFetch } from "../../hooks/useFetch";
 import { getErrorMessage } from "../../utils/error";
 import type { DanhMuc } from "../../types";
@@ -74,10 +76,10 @@ export default function AdminCategories() {
           disabled={busy}
           onClick={() => rename(c)}
         >
-          <Icon
+          {busy ? <span className="admin-action-spinner" aria-hidden="true" /> : <Icon
             name="edit"
             size={16}
-          />
+          />}
         </button>
         <button
           className="icon-btn"
@@ -85,19 +87,21 @@ export default function AdminCategories() {
           disabled={busy}
           onClick={() => remove(c)}
         >
-          <Icon
+          {busy ? <span className="admin-action-spinner" aria-hidden="true" /> : <Icon
             name="trash"
             size={16}
-          />
+          />}
         </button>
       </div>
       {c.danhMucCons.length > 0 && <ul>{c.danhMucCons.map(renderNode)}</ul>}
     </li>
   );
 
+  if (loading) return <AdminPageSkeleton variant="table" />;
+
   return (
     <div className="stack">
-      <h1>Danh mục</h1>
+      <div className="admin-simple-heading"><h1>Danh mục</h1><AdminRefreshButton /></div>
       <form
         className="panel row"
         onSubmit={add}
@@ -134,16 +138,16 @@ export default function AdminCategories() {
           className="btn"
           disabled={busy}
         >
-          <Icon
+          {busy ? <span className="admin-action-spinner" aria-hidden="true" /> : <Icon
             name="plus"
             size={16}
-          />{" "}
-          Thêm
+          />}
+          {busy ? "Đang cập nhật…" : "Thêm"}
         </button>
       </form>
 
-      {loading && !data ? (
-        <Spinner />
+      {loading ? (
+        <AdminPageSkeleton variant="table" />
       ) : error ? (
         <ErrorBox
           message={error}

@@ -91,13 +91,9 @@ export default function PostCreate() {
 
   return (
     <>
-      <div className="page-head">
-        <h1>Đăng tin bán đồ</h1>
-      </div>
       <form
-        className="stack"
+        className="post-create-form"
         onSubmit={submit}
-        style={{ maxWidth: 820 }}
       >
         {error && (
           <div
@@ -108,9 +104,16 @@ export default function PostCreate() {
           </div>
         )}
 
-        <section className="panel stack">
-          <h2 style={{ fontSize: "1.15rem" }}>Món đồ</h2>
-          <div className="form-grid">
+        <section className="post-create-category">
+          <span className="post-create-category-icon"><Icon name="tag" size={17} /></span>
+          <div><small>Danh mục đăng tin</small><strong>{idDanhMuc ? "Đã chọn danh mục" : "Chọn danh mục sản phẩm"}</strong></div>
+          <span className="post-create-step">Bước 2/2</span>
+          <button type="button" onClick={() => document.getElementById("dm")?.focus()}>Thay đổi <Icon name="right" size={14} /></button>
+        </section>
+
+        <section className="post-create-section">
+          <h2><Icon name="grid" size={17} /> Thông tin chi tiết</h2>
+          <div className="post-create-grid">
             <div className="field span-2">
               <label htmlFor="td">Tiêu đề tin</label>
               <input
@@ -146,8 +149,8 @@ export default function PostCreate() {
                 onChange={(e) => setGiaTien(e.target.value)}
               />
             </div>
-            <div className="field span-2">
-              <label htmlFor="dm">Danh mục</label>
+            <div className="field">
+              <label htmlFor="dm">Danh mục <em>*</em></label>
               <CategorySelect
                 id="dm"
                 required
@@ -157,8 +160,8 @@ export default function PostCreate() {
                 placeholder="Chọn danh mục"
               />
             </div>
-            <div className="field span-2">
-              <label htmlFor="nd">Mô tả chi tiết</label>
+            <div className="field">
+              <label htmlFor="nd">Mô tả chi tiết <em>*</em></label>
               <textarea
                 id="nd"
                 required
@@ -182,9 +185,14 @@ export default function PostCreate() {
           </div>
         </section>
 
-        <section className="panel stack">
-          <h2 style={{ fontSize: "1.15rem" }}>Nơi bán</h2>
-          <div className="form-grid">
+        <section className="post-create-section">
+          <h2><Icon name="tag" size={17} /> Giá bán mong muốn (VNĐ) <em>*</em></h2>
+          <div className="post-price-entry"><div className="field"><label htmlFor="gia">Nhập mức giá (VNĐ)</label><input id="gia" type="number" required min={0} step={1000} value={giaTien} onChange={(e) => setGiaTien(e.target.value)} placeholder="Nhập giá bán" /></div><p>Mức giá có thể trao đổi trực tiếp với người mua.</p></div>
+        </section>
+
+        <section className="post-create-section">
+          <h2><Icon name="pin" size={17} /> Địa chỉ &amp; Thông tin liên hệ</h2>
+          <div className="post-create-grid">
             <LocationFields
               idThanhPho={idThanhPho}
               idPhuongXa={idPhuongXa}
@@ -220,9 +228,10 @@ export default function PostCreate() {
               />
             </div>
           </div>
+          <div className="post-contact-note"><span><Icon name="chat" size={17} /></span><div><small>Thông tin liên hệ</small><strong>Điện thoại liên hệ của bạn</strong></div><label><input type="checkbox" defaultChecked /> Cho phép nhắn tin qua Chợ</label></div>
         </section>
 
-        <section className="panel stack">
+        <section className="post-create-section post-images-section">
           <div>
             <h2 style={{ fontSize: "1.15rem" }}>Ảnh sản phẩm</h2>
             <p className="hint">
@@ -278,21 +287,22 @@ export default function PostCreate() {
           </div>
         </section>
 
-        <div className="row">
+        <div className="post-create-submit">
           <button
             className="btn"
             disabled={busy}
           >
-            {busy ? "Đang gửi…" : "Đăng tin"}
+            {busy ? "Đang gửi…" : "Đăng tin ngay"}
           </button>
           <button
             type="button"
             className="btn btn-ghost"
             onClick={() => navigate(-1)}
           >
-            Huỷ
+            Quay về
           </button>
         </div>
+        <p className="post-create-terms">Bằng việc đăng tin, bạn đồng ý với <a href="#quy-che">Quy chế hoạt động</a> và <a href="#dieu-khoan">Điều khoản bảo mật</a> của Chợ Đồ Cũ.</p>
       </form>
     </>
   );

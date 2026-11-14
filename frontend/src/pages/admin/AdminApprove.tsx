@@ -5,6 +5,8 @@ import { useToast } from "../../contexts/ToastContext";
 import { useDocumentTitle } from "../../hooks/useDocumentTitle";
 import { getErrorMessage } from "../../utils/error";
 import { formatPrice, TRANG_THAI_BAI_DANG } from "../../utils/format";
+import AdminPageSkeleton from "../../components/admin/AdminPageSkeleton";
+import AdminRefreshButton from "../../components/admin/AdminRefreshButton";
 import type { BaiDang } from "../../types";
 
 /** BE chưa có API "danh sách chờ duyệt", nên staff mở tin theo mã (mã có trong thông báo/URL). */
@@ -14,6 +16,7 @@ export default function AdminApprove() {
   const [id, setId] = useState("");
   const [post, setPost] = useState<BaiDang | null>(null);
   const [busy, setBusy] = useState(false);
+  const [busyAction, setBusyAction] = useState<"load" | "duyet" | "tuChoi" | null>(null);
 
   const load = async (e: FormEvent) => {
     e.preventDefault();
@@ -21,6 +24,7 @@ export default function AdminApprove() {
     if (!Number.isInteger(n) || n <= 0)
       return toast("Mã tin phải là số nguyên dương.", "error");
     setBusy(true);
+    setBusyAction("load");
     try {
       setPost(await baiDangApi.chiTiet(n));
     } catch (err) {
@@ -28,12 +32,14 @@ export default function AdminApprove() {
       toast(getErrorMessage(err), "error");
     } finally {
       setBusy(false);
+      setBusyAction(null);
     }
   };
 
   const act = async (kind: "duyet" | "tuChoi") => {
     if (!post) return;
     setBusy(true);
+    setBusyAction(kind);
     try {
       await (kind === "duyet" ? baiDangApi.duyet(post.id) : baiDangApi.tuChoi(post.id));
       toast(kind === "duyet" ? "Đã duyệt tin." : "Đã từ chối tin.", "ok");
@@ -42,12 +48,13 @@ export default function AdminApprove() {
       toast(getErrorMessage(err), "error");
     } finally {
       setBusy(false);
+      setBusyAction(null);
     }
   };
 
   return (
     <div className="stack">
-      <h1>Duyệt bài</h1>
+      <div className="admin-simple-heading"><h1>Duyệt bài</h1><AdminRefreshButton /></div>
       <form
         className="row"
         onSubmit={load}
@@ -66,9 +73,12 @@ export default function AdminApprove() {
           className="btn"
           disabled={busy}
         >
-          Mở tin
+          {busyAction === "load" && <span className="admin-action-spinner" aria-hidden="true" />}
+          {busyAction === "load" ? "Đang tải tin…" : "Mở tin"}
         </button>
       </form>
+
+      {busyAction === "load" && <AdminPageSkeleton variant="form" />}
 
       {post && (
         <div className="panel stack">
@@ -92,14 +102,16 @@ export default function AdminApprove() {
               disabled={busy}
               onClick={() => void act("duyet")}
             >
-              Duyệt
+              {busyAction === "duyet" && <span className="admin-action-spinner" aria-hidden="true" />}
+              {busyAction === "duyet" ? "Đang duyệt…" : "Duyệt"}
             </button>
             <button
               className="btn btn-danger"
               disabled={busy}
               onClick={() => void act("tuChoi")}
             >
-              Từ chối
+              {busyAction === "tuChoi" && <span className="admin-action-spinner" aria-hidden="true" />}
+              {busyAction === "tuChoi" ? "Đang từ chối…" : "Từ chối"}
             </button>
             <Link
               to={`/bai-dang/${post.id}`}

@@ -6,7 +6,7 @@ import { imgSrc, onImgError } from "../../utils/image";
 import MaterialIcon from "../common/MaterialIcon";
 import FavoriteButton from "./FavoriteButton";
 
-const AUTO_MS = 3500;
+const AUTO_SPEED = 50;
 
 function BoostedCard({ post }: { post: BaiDang }) {
   return (
@@ -76,11 +76,19 @@ function BoostedCard({ post }: { post: BaiDang }) {
 /** Dải tin được đẩy: thẻ nổi bật viền gradient, tự cuộn từng thẻ, dừng khi rê chuột/focus hoặc bấm tạm dừng. */
 export default function BoostedStrip({ posts }: { posts: BaiDang[] }) {
   const scroller = useRef<HTMLDivElement>(null);
+  const animationFrame = useRef<number | null>(null);
+  const previousFrame = useRef<number | null>(null);
   const [paused, setPaused] = useState(false);
   const [hover, setHover] = useState(false);
-  const reduced =
-    typeof window !== "undefined" &&
-    window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const [reduced, setReduced] = useState(false);
+
+  useEffect(() => {
+    const media = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => setReduced(media.matches);
+    sync();
+    media.addEventListener("change", sync);
+    return () => media.removeEventListener("change", sync);
+  }, []);
 
   const step = useCallback((dir: 1 | -1) => {
     const el = scroller.current;
@@ -95,10 +103,32 @@ export default function BoostedStrip({ posts }: { posts: BaiDang[] }) {
   }, []);
 
   useEffect(() => {
-    if (paused || hover || reduced || posts.length < 2) return;
-    const t = window.setInterval(() => step(1), AUTO_MS);
-    return () => window.clearInterval(t);
-  }, [paused, hover, reduced, posts.length, step]);
+    const el = scroller.current;
+    if (!el || paused || hover || reduced || posts.length < 2) return;
+
+    const tick = (now: number) => {
+      if (previousFrame.current !== null) {
+        const elapsed = Math.min(now - previousFrame.current, 50);
+        // Move the native scroll position steadily to the left.
+        el.scrollLeft += (AUTO_SPEED * elapsed) / 1000;
+        if (el.scrollLeft + el.clientWidth >= el.scrollWidth - 1) {
+          el.scrollLeft = 0;
+        }
+      }
+      previousFrame.current = now;
+      animationFrame.current = window.requestAnimationFrame(tick);
+    };
+
+    previousFrame.current = null;
+    animationFrame.current = window.requestAnimationFrame(tick);
+    return () => {
+      if (animationFrame.current !== null) {
+        window.cancelAnimationFrame(animationFrame.current);
+      }
+      animationFrame.current = null;
+      previousFrame.current = null;
+    };
+  }, [paused, hover, reduced, posts.length]);
 
   const round =
     "w-9 h-9 rounded-full border-0 cursor-pointer bg-surface-container-lowest shadow-sm hover:bg-primary-fixed flex items-center justify-center text-on-surface transition-colors";
@@ -168,19 +198,27 @@ export default function BoostedStrip({ posts }: { posts: BaiDang[] }) {
       </div>
 
       <div
-        ref={scroller}
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
-        onFocus={() => setHover(true)}
-        onBlur={() => setHover(false)}
-        className="mt-space-lg flex gap-space-md overflow-x-auto scroll-smooth snap-x snap-mandatory pb-space-md pt-space-xs [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        onFocusCapture={() => setHover(true)}
+        onBlurCapture={(event) => {
+          if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
+            setHover(false);
+          }
+        }}
+        className="mt-space-lg overflow-hidden"
       >
-        {posts.map((p) => (
-          <BoostedCard
-            key={p.id}
-            post={p}
-          />
-        ))}
+        <div
+          ref={scroller}
+          className="flex gap-space-md overflow-x-auto pb-space-md pt-space-xs [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        >
+          {posts.map((p) => (
+            <BoostedCard
+              key={p.id}
+              post={p}
+            />
+          ))}
+        </div>
       </div>
     </section>
   );

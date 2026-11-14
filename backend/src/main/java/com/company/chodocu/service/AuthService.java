@@ -54,6 +54,27 @@ public class AuthService {
         return taoResponse(u);
     }
 
+    @Transactional(readOnly=true)
+    public AuthResponse dangNhapClient(DangNhapRequest r) {
+        NguoiDung u=users.findByEmailIgnoreCase(r.email().trim()).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Email hoặc mật khẩu không đúng."));
+        if(u.getMatKhauHash()==null || !encoder.matches(r.matKhau(),u.getMatKhauHash())) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Email hoặc mật khẩu không đúng.");
+        if(u.getTrangThai()!=TrangThaiNguoiDung.HOAT_DONG) throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Tài khoản đã bị khóa.");
+        boolean client=u.getVaiTros().stream().anyMatch(role -> AppRoles.USER.equals(role.getMaVaiTro()));
+        boolean staff=u.getVaiTros().stream().anyMatch(role -> AppRoles.ADMIN.equals(role.getMaVaiTro()) || AppRoles.MODERATOR.equals(role.getMaVaiTro()));
+        if(!client || staff) throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Bạn không thể đăng nhập bằng tài khoản quản trị. Vui lòng dùng cổng quản trị.");
+        return taoResponse(u);
+    }
+
+    @Transactional(readOnly=true)
+    public AuthResponse dangNhapQuanTri(DangNhapRequest r) {
+        NguoiDung u=users.findByEmailIgnoreCase(r.email().trim()).orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Email hoặc mật khẩu không đúng."));
+        if(u.getMatKhauHash()==null || !encoder.matches(r.matKhau(),u.getMatKhauHash())) throw new ResponseStatusException(HttpStatus.UNAUTHORIZED,"Email hoặc mật khẩu không đúng.");
+        if(u.getTrangThai()!=TrangThaiNguoiDung.HOAT_DONG) throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Tài khoản đã bị khóa.");
+        boolean staff=u.getVaiTros().stream().anyMatch(role -> AppRoles.ADMIN.equals(role.getMaVaiTro()) || AppRoles.MODERATOR.equals(role.getMaVaiTro()));
+        if(!staff) throw new ResponseStatusException(HttpStatus.FORBIDDEN,"Tài khoản này không có quyền truy cập cổng quản trị.");
+        return taoResponse(u);
+    }
+
     @Transactional
     public AuthResponse dangNhapGoogle(DangNhapGoogleRequest request) {
         GoogleTokenVerifier.GoogleUser info=google.xacThuc(request.idToken());
